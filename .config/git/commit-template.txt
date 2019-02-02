@@ -1,0 +1,7 @@
+short commit summary (<50 chars)
+#         1234567890123456789012345678901234567890
+
+More detailed commit information.
+
+* Bullet points for changelog
+

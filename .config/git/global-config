@@ -1,0 +1,71 @@
+[user]
+  name = Jason Kohles
+
+[core]
+  pager = less -FRSX
+  whitespace = fix,-indent-with-non-tab,trailing-space,-cr-at-eol
+  excludesfile = ~/.config/git/global-ignore
+  attributesFile = ~/.config/git/attributes
+  autocrlf = input
+
+[apply]
+  whitespace = warn
+
+[color]
+  ui = true
+
+[help]
+  format = man
+  autocorrect = -1
+
+[web]
+  browser = open
+
+[merge]
+  keepbackup = false
+  log = true
+
+[merge "ours"]
+  driver = true
+
+[diff "nodiff"]
+  command = true
+
+[branch]
+  autosetuprebase = always
+
+[rebase]
+  stat = true
+
+[diff]
+  mnemonicprefix = true
+  renames = copies
+  suppressblankempty = true
+
+[commit]
+  template = ~/.config/git/commit-template.txt
+
+[rerere]
+  enabled = true
+  autoupdate = true
+
+[push]
+  default = current
+
+[diff "odf"]
+  textconv = odt2txt
+
+[pull]
+  rebase = true
+
+[mailmap]
+  file = ~/.gitmailmap
+
+[log]
+  mailmap = true
+
+[credential]
+  helper = osxkeychain
+
+[hub]
+  protocol = https

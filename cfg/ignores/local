@@ -1,0 +1,4 @@
+# These shouldn't be committed because they are intended to be local
+# to each machine.
+/.gitconfig
+/.goto

@@ -1,0 +1,7 @@
+# These are various history files that track commands you ran.  It's
+# possible you might want to commit these, but you should be sure you
+# know what you are doing if you do (and if your dotfile repo is
+# public, you definitely should not)
+/.*_history
+/.lesshst
+/.dbshell

@@ -1,0 +1,66 @@
+#!/usr/bin/perl -w
+use strict; use warnings;
+
+chomp( my $kermit = `which kermit` );
+die "Unable to locate kermit\n" unless $kermit;
+
+my @devices = sort { $a cmp $b } (
+    </dev/tty.PL2303-*>,
+    </dev/tty.usbmodem*>,
+    </dev/ttyS*>,
+    </dev/ttyACM*>,
+    </dev/tty.usbserial*>,
+);
+
+my $which = 0;
+my $speed = 9600;
+
+while ( @ARGV ) {
+    my $arg = shift;
+    if ( $arg =~ /^\d+$/ ) {
+        if ( $arg < 10 ) {
+            $which = $arg;
+        } else {
+            $speed = $arg;
+        }
+    } else {
+        die "Unknown argument '$arg'\n";
+    }
+}
+
+my $dev;
+if ( @devices == 1 ) {
+    $dev = $devices[0];
+} elsif ( $which ) {
+    $dev = $devices[ $which - 1 ];
+} else {
+    print "Found the following console devices:\n";
+    my $i = 1;
+    for ( @devices ) {
+        printf( "% 3d - %s\n", $i++, $_ );
+    }
+    exit 1;
+}
+
+print "Proceeding with console=$dev speed=$speed\n";
+
+my $script = "/tmp/console-$$";
+system( "rm", "-rf", $script );
+open( my $fh, '>', $script ) or die "Can't create console script\n";
+print $fh <<"END";
+#!$kermit +
+set modem type none
+set line $dev
+set speed $speed
+set flow-control none
+set carrier-watch off
+connect
+quit
+END
+close( $fh );
+system( "chmod", "u+rx", $script );
+system( $script );
+
+sub usage {
+    print "Usage: $0 [console #] [speed]\n";
+}

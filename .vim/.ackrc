@@ -1,0 +1,9 @@
+--ignore-dir=is:bundle
+--ignore-dir=is:pack
+--ignore-dir=is:.backup
+--ignore-dir=is:.git
+--ignore-dir=is:.tmp
+--ignore-dir=is:.undo
+
+--ignore-file=is:.gitignore
+--ignore-file=is:.netrwhist

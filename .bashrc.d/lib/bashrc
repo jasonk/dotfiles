@@ -1,0 +1,40 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then . /etc/bashrc; fi
+
+source_scripts() {
+  local script
+  local dir
+  for dir in "$@"; do
+    pushd $dir > /dev/null || break
+    for script in *.sh; do
+      if [ -f "$script" ]; then source "$script"; fi
+    done
+    popd > /dev/null || break
+  done
+}
+
+source_scripts $HOME/.bashrc.d/lib
+
+pathedit --prepend ~/bin ~/tools/bin /usr/local/bin
+manpathedit --prepend /usr/local/share/man
+
+source_scripts $HOME/.bashrc.d
+
+pathedit --clean-duplicates
+manpathedit --clean-duplicates
+cdpathedit --clean-duplicates
+perl5libedit --clean-duplicates
+
+check_canary $HOME/.bashrc $HOME/.profile
+
+#if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
+# ssh() {
+#   SetTerminalStyle ssh
+#   /usr/bin/ssh "$@"
+#   SetTerminalStyle default
+# }
+#fi
+
+## END OF FILE ##

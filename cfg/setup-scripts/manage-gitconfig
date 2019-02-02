@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+###################
+# Copyright 2019 Jason Kohles <email@jasonkohles.com>
+# MIT Licensed
+# https://github.com/jasonk/dotfiles
+####################
+
+# This lets me have my "universal" (the same on all machines) git
+# config stored in ~/.config/git, but also to keep machine-specific
+# settings in ~/.gitconfig
+if [ ! -f "$HOME/.gitconfig" ]; then
+  touch "$HOME/.gitconfig"
+fi
+if [ -d "$HOME/.config/git" ]; then
+  git config --global include.path .config/git/config
+fi

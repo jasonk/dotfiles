@@ -1,0 +1,14 @@
+set port /dev/tty.usbmodem1411
+set baudrate 250000
+set build_dimensions 220.00x220.00x100.00+0.00+0.00+0.00+0.00+0.00+0.00
+set last_temperature 220.0
+set last_bed_temperature 115.0
+set tempgauges True
+set monitor True
+set xy_feedrate 3000
+set z_feedrate 200
+set e_feedrate 200
+set temperature_abs 220
+set extruders 1
+set slic3rintegration True
+set last_extrusion 50

@@ -1,0 +1,15 @@
+#!/bin/bash
+###################
+# Copyright 2019 Jason Kohles <email@jasonkohles.com>
+# MIT Licensed
+# https://github.com/jasonk/dotfiles
+####################
+
+git fetch origin
+count="$(git rev-list HEAD..origin/master --count)"
+
+if [ "$count" -gt 0 ]; then
+  echo "There are $count new commits available on origin"
+else
+  echo "Your work tree has all the commits available from the origin"
+fi

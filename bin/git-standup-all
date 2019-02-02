@@ -1,0 +1,44 @@
+#!/bin/bash
+set -e
+
+DIRS=( "$@" )
+
+if [ "${#DIRS[@]}" -eq 0 ]; then DIRS=( . ); fi
+
+RED="\033[0;31m"
+LIGHT_RED="\033[1;31m"
+GREEN="\033[0;32m"
+LIGHT_GREEN="\033[1;32m"
+BLUE="\[\033[0;34m\]"
+LIGHT_BLUE="\033[1;34m"
+
+GRAY="\033[0;37m"
+WHITE="\033[1;37m"
+RESET="\033[0m"
+BOLD=$(tput bold)
+NORMAL=$(tput sgr0)
+
+commits() {
+  local REPO="$1"
+  git -C "$REPO" standup | egrep -v '^Seems like' | gsed 's/^[0-9a-f]\+ - //g'
+}
+
+standup() {
+  local REPO="$1"
+  local OUT="$(commits "$REPO")"
+  if [ -n "$OUT" ]; then
+    echo -e "${WHITE}${BOLD}$(basename "$REPO")${RESET}"
+    echo "$OUT" | sed 's/^\w+ - //'
+  fi
+}
+
+for DIR in "${DIRS[@]}"; do
+  (
+    cd "$DIR"
+    for I in *; do
+      [ -d "$I" ] || continue
+      [ -d "$I/.git" ] || continue
+      standup "$I"
+    done
+  )
+done

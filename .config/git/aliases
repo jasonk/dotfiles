@@ -1,0 +1,43 @@
+[alias]
+b = branch
+recent = branch --sort=committerdate
+c = checkout
+co = commit
+d = diff -b
+dc = diff -b --cached
+ds = diff -b --stat
+s = status
+# summary of what is about to be pushed
+ps = log --pretty=oneline @{u}..
+# like "git log", but include the diffs
+w = whatchanged -p
+# changes since we last did a push
+wo = whatchanged -p origin..
+pushtags = push origin --tags
+pushnotes = push origin refs/notes/*
+
+fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+ri = rebase --interactive --autosquash
+rbu = !git fetch upstream && git rebase upstream/master --autostash
+rbo = !git fetch origin && git rebase origin/master --autostash
+wdiff = diff --color-words
+ignore = update-index --assume-unchanged
+unignore = update-index --no-assume-unchanged
+showignore = !git ls-files -v | grep '^h'
+lsu = ls-files --unmerged
+ls-unmerged = !git lsu | cut -f2 | sort -u
+edit-unmerged = !$EDITOR $(git lsu | cut -f2 | sort -u)
+eu = edit-unmerged
+add-unmerged = !$EDITOR $(git lsu | cut -f2 | sort -u)
+au = add-unmerged
+prune-all = !git remote | xargs -n 1 git remote prune
+
+# lc = See what commits we got in the last fetch
+lc = log ORIG_HEAD.. --stat --no-merges
+
+# llog = Just like 'git log' but with localized timestamps
+llog = log --date=local
+
+# Run gitk for conflict resolution
+gitkconflict = !gitk --left-right HEAD..MERGE_HEAD

@@ -1,0 +1,19 @@
+# These are files that shouldn't be committed because they contain
+# authentication information.
+/.npmrc
+/.meteorsession
+/.netrc
+/.3T
+/.gnupg
+/.hub-token
+/.*-auth
+/.*-pw
+/.aws/credentials
+/.ssh
+/.ngrok2
+/.vault-token
+.env
+.env.*
+/.serverauth.*
+/.Xauthority
+/.linodecli

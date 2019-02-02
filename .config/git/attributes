@@ -1,0 +1,7 @@
+* text=auto
+
+#package-lock.json merge=ours diff=nodiff
+package-lock.json binary
+
+*.svg binary
+*.eps binary

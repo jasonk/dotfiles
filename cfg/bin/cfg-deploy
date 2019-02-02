@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+###################
+# Copyright 2019 Jason Kohles <email@jasonkohles.com>
+# MIT Licensed
+# https://github.com/jasonk/dotfiles
+####################
+set -euo pipefail
+set -x
+
+warn() { echo "$@" 1>&2; }
+die() { warn "$@"; exit 1; }
+
+sshopts=(
+  -t
+  -o "ControlPath=~/.ssh/master-$$"
+  -o "ControlMaster=auto"
+  -o "ControlPersist=60"
+)
+
+usage() {
+cat <<'END'
+Usage: cfg deploy [options] username@hostname hostname
+
+This command uses ssh and rsync to deploy a copy of your dotfiles from
+the local machine to the target hosts you specify.  If your username is
+different on the remote machine than it is on the local machine you can
+include a username.  Since it's all just using ssh, if your ssh config
+gets the right username then that will work too.
+
+IMPORTANT: Although the deploy command will not overwrite your
+dotfiles on the remote machine (unless you ask it to), it *will*
+overwrite your ~/.cfg directory, so you should not use this command if
+you have local changes to the configs on the remote machine.  I use
+this primarily to send copies of my dotfiles to servers that I work
+with, and in many cases those machines can't get to GitHub, so I never
+make local changes there.
+
+Options:
+
+    --overwrite   Overwrite dotfiles on the remote machine
+
+END
+}
+
+OVERWRITE=false
+FORCE=false
+TARGETS=()
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --overwrite)  OVERWRITE=true            ; shift 1 ;;
+    --force)      FORCE=true                ; shift 1 ;;
+    --help)       usage                     ; exit    ;;
+    -*)           die "Unknown option '$1'"           ;;
+    *)            TARGETS+=( "$1" )         ; shift 1 ;;
+  esac
+done
+
+for TARGET in "${TARGETS[@]}"; do
+
+  HAVE_CFG="$(ssh "$TARGET" "test -d ~/.cfg && echo YES || echo NO")"
+
+  ssh="ssh ${sshopts[*]} $TARGET"
+  git="git --git-dir=.cfg --work-tree=."
+
+  if [ "$HAVE_CFG" = "NO" ]; then
+    $ssh "rm -rf .cfg.git .cfg.tmp || true"
+    $ssh "git init --bare .cfg.git"
+    cfg push "$TARGET:.cfg"
+    $ssh "$git --work-tree=.cfg.tmp clone .cfg.git"
+    $ssh "rm -rf .cfg.tmp .cfg.git"
+  elif [ "$HAVE_CFG" = "YES" ]; then
+    OPTS=()
+    if $FORCE; then OPTS+=( --force ); fi
+
+    cfg push "${OPTS[@]}" \
+      "$TARGET:.cfg" \
+      "+refs/heads/*:refs/remotes/origin/*"
+    $ssh "$git checkout master"
+  else
+    warn "Had some kind of problem connecting to $TARGET"
+    warn "Expected 'YES' or 'NO', got '$HAVE_CFG'"
+    warn "This target was skipped"
+    return
+  fi
+  $ssh "$git status -uno --porcelain \
+    | sed -n 's/^ D //p' | tr '\n' '\0' \
+    | xargs -0 $git checkout --"
+  if $OVERWRITE; then
+    $ssh "$git status -uno --porcelain \
+      | sed -n 's/^ M //p' | tr '\n' '\0' \
+      | xargs -0 $git checkout --"
+  fi
+  $ssh "bin/cfg ignore"
+done

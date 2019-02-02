@@ -1,0 +1,2 @@
+default_programmer = "avrisp2";
+default_serial = "usb";

@@ -1,0 +1,66 @@
+# This is the default ackrc for ack version 2.14.
+
+# There are four different ways to match
+#
+# is:  Match the filename exactly
+#
+# ext: Match the extension of the filename exactly
+#
+# match: Match the filename against a Perl regular expression
+#
+# firstlinematch: Match the first 250 characters of the first line
+#   of text against a Perl regular expression.  This is only for
+#   the --type-add option.
+
+### Filetypes defined
+# Default types:
+#   perl make perltest rake cmake actionscript ada asp aspx asm batch
+#   cfmx clojure cc hh coffeescript cpp csharp css dart delphi elixir
+#   elisp erlang fortran go groovy haskell html jade java js jsp json
+#   less lisp lua objc objcpp ocaml matlab parrot php plone python rr
+#   rst ruby rust sass scala scheme shell smalltalk smarty sql stylus
+#   tcl tex tt vb verilog vhdl vim xml yaml
+
+# Perl
+# http://perl.org/
+#--type-add=perl:ext:pl,pm,pod,t,psgi
+#--type-add=perl:firstlinematch:/^#!.*\bperl/
+
+--ignore-dir=is:bower_components
+--ignore-dir=is:.meteor
+--ignore-dir=is:.storybook
+--ignore-dir=is:.styleguide
+
+--ignore-file=match:/[.]log$/
+
+#--ignore-dir=match:/[.]cached$/
+
+#--pager=less -RFX
+
+--ignore-dir=is:bower_components
+
+--ignore-dir=is:node_modules
+--ignore-dir=is:.test-results
+
+--ignore-dir=is:.nyc_output
+--ignore-dir=is:coverage
+--ignore-dir=is:lcov-report
+--ignore-dir=is:test-results
+--ignore-file=is:.coverage.json
+
+--ignore-file=is:.babelrc
+--ignore-file=is:.editorconfig
+--ignore-file=is:.eslintignore
+--ignore-file=is:.eslintrc.yml
+--ignore-file=is:.eslintrc
+--ignore-file=is:.ackrc
+
+--ignore-file=is:package.json
+--ignore-file=is:package-lock.json
+--ignore-file=is:npm-shrinkwrap.json
+--ignore-file=is:yarn.lock
+--ignore-file=is:webpack.json
+--ignore-file=is:lockdown.json
+--ignore-file=is:settings.json
+
+--ignore-file=match:/[.]log$/

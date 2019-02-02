@@ -1,0 +1,10 @@
+/bundle
+/sessions
+/.DS_Store
+/.netrwhist
+/spell
+/plugins.vim
+/.undo
+/.backup
+/.tmp
+/pack

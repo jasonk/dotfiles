@@ -1,0 +1,8 @@
+[github]
+  user = jasonk
+
+[url "git://github.com/"]
+  insteadOf = github:
+
+[url "git@github.com:"]
+  pushInsteadOf = github:
