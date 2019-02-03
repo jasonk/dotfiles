@@ -38,6 +38,8 @@ make local changes there.
 Options:
 
     --overwrite   Overwrite dotfiles on the remote machine
+    --force       Force push to remote repository
+    --remote      Override setting remote on new repos
 
 END
 }
@@ -45,15 +47,19 @@ END
 OVERWRITE=false
 FORCE=false
 TARGETS=()
+REMOTE="$(cfg remote get-url origin)"
 while [ $# -gt 0 ]; do
   case "$1" in
     --overwrite)  OVERWRITE=true            ; shift 1 ;;
     --force)      FORCE=true                ; shift 1 ;;
+    --remote)     REMOTE="$2"               ; shift 2 ;;
+    --remote=*)   REMOTE="${1##*=}"         ; shift 1 ;;
     --help)       usage                     ; exit    ;;
     -*)           die "Unknown option '$1'"           ;;
     *)            TARGETS+=( "$1" )         ; shift 1 ;;
   esac
 done
+
 
 for TARGET in "${TARGETS[@]}"; do
 
@@ -68,6 +74,7 @@ for TARGET in "${TARGETS[@]}"; do
     cfg push "$TARGET:.cfg"
     $ssh "$git --work-tree=.cfg.tmp clone .cfg.git"
     $ssh "rm -rf .cfg.tmp .cfg.git"
+    $ssh "$git remote set-url origin $REMOTE"
   elif [ "$HAVE_CFG" = "YES" ]; then
     OPTS=()
     if $FORCE; then OPTS+=( --force ); fi
