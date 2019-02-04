@@ -1,1 +1,1 @@
-exec /usr/local/bin/bash
+source "$HOME/.bashrc"
