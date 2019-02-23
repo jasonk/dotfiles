@@ -50,7 +50,7 @@
   autoupdate = true
 
 [push]
-  default = current
+  default = simple
 
 [diff "odf"]
   textconv = odt2txt
