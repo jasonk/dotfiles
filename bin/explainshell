@@ -1,0 +1,24 @@
+#!/bin/bash
+
+urlencode() {
+  local LANG=C i c
+  for (( i = 0 ; i < ${#1} ; i++ )); do
+    c="${1:$i:1}"
+    if [[ $c =~ ^[a-zA-Z0-9\.\~\_\-]$ ]]; then
+      printf '%s' "$c"
+    else
+      printf '%%%02X' "'$c"
+    fi
+  done
+}
+
+
+CMD=""
+for I in "$@"; do
+  if [ -n "$CMD" ]; then CMD+="+"; fi
+  CMD+="$(urlencode "$I")";
+done
+echo "$CMD"
+
+OPEN="$(command -v open browser google-chrome | head -1)"
+"$OPEN" "https://explainshell.com/explain?cmd=$CMD"

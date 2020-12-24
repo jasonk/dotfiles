@@ -1,0 +1,47 @@
+#!/bin/bash
+
+BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+
+clean() {
+  echo "$1" \
+    | sed -E "s/"$'\E'"\[([0-9]{1,3}((;[0-9]{1,3})*)?)?[m|K]//g" \
+    | sed -E "s/^.+ -> //g"
+}
+
+list-branches() {
+  local line desc
+  git branch --color=always --list "$@" | while IFS= read -r line; do
+    desc="$(get-desc "$line")"
+    if [ -n "$desc" ]; then
+      echo "$line - $(get-desc "$line")"
+    else
+      echo "$line"
+    fi
+  done
+}
+
+get-desc() {
+  if [ -n "$1" ]; then
+    git config "branch.$(clean "$1").description"
+  else
+    git config "branch.${BRANCH}.description"
+  fi
+}
+
+set-desc() {
+  if [ $# -gt 1 ]; then
+    git config "branch.${1}.description" "$2"
+  else
+    git config "branch.${BRANCH}.description" "$1"
+  fi
+}
+
+ACT="$1" ; shift
+
+case "$ACT" in
+  --edit) exec git branch --edit-description "$@" ;;
+  --set) set-desc "$1" ;;
+  --get) get-desc "$1" ;;
+  --list) list-branches "$@" ;;
+  *) get-desc "$@" ;;
+esac

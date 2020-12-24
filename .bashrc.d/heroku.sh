@@ -1,5 +1,3 @@
-#!/bin/bash
+# shellcheck shell=bash
 
-if [ -d "/usr/local/heroku" ]; then
-    pathedit --append /usr/local/heroku/bin
-fi
+pathedit --append /usr/local/heroku/bin

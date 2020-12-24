@@ -1,0 +1,57 @@
+// vim:syntax=javascript
+const fs = require( 'fs' );
+Object.assign( global, require( 'lodash/fp' ), {
+
+  // edit-in-place function: fx data.json '{...this, count: 1}' save
+  save( json ) {
+    fs.writeFileSync( process.argv[2], JSON.stringify( json, null, 2 ) );
+    return json;
+  },
+
+  // Output array data as a raw list, so you can pipe it to other things
+  // curl https://swapi.co/api/planets/1/ | fx .films list | xargs curl
+  // The `undefined` that gets returned is printed to stderr, so it
+  // doesn't affect the output of the list
+  list( json ) {
+    json.forEach( x => console.log( x ) );
+    return;
+  },
+
+  find( re ) { return json => [ ...find( json, re ) ]; },
+
+} );
+
+/**
+ * Find paths where the value matches a regexp.
+ *
+ *  fx data.json 'find(/fix/i)'
+ *
+ * Combine with list function for great power!
+ *
+ * fx data.json 'find(/fix/i)' list | xargs -L1 fx data.json
+ */
+function * find( v, regex, path = '' ) {
+  if ( regex.test( path ) ) {
+    yield path;
+    return;
+  }
+
+  if ( typeof v === 'undefined' || v === null ) return;
+
+  if ( Array.isArray( v ) ) {
+    const prefix = ( path === '' ? 'this' : path );
+    for ( const [ i, value ] of v.entries() ) {
+      yield * find( value, regex, prefix + '[' + i + ']' );
+    }
+    return;
+  }
+
+  if ( typeof v === 'object' && v.constructor === Object ) {
+    for ( const [ key, value ] of Object.entries( v ) ) {
+      yield * find( value, regex, path + '.' + key );
+    }
+    return;
+  }
+
+  if ( regex.test( v ) ) yield path;
+}

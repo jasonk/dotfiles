@@ -1,0 +1,33 @@
+#!/bin/bash
+
+APP="$1" ; shift
+
+SEARCH=(
+  /System/Applications
+  /System/Applications/Utilities
+  /Applications
+  /Applications/Utilities
+)
+
+find-app-script() {
+  for S in "${SEARCH[@]}"; do
+    if [ -d "$S/$APP.app" ]; then
+      # If the app contains an executable with the same name then use that
+      if [ -x "$S/$APP.app/Contents/MacOS/$APP" ]; then
+        echo "$S/$APP.app/Contents/MacOS/$APP"
+        return
+      fi
+      # Otherwise we just use whatever executable we find first,
+      # hopefully this works
+      for I in "$S/$APP.app/Contents/MacOS"/*; do
+        if [ -x "$S/$APP.app/Contents/MacOS/$I" ]; then
+          echo "$S/$APP.app/Contents/MacOS/$I"
+          return
+        fi
+      done
+    fi
+  done
+}
+
+SCR="$(find-app-script)"
+exec osascript -e "do shell script \"$SCR\" with administrator privileges"

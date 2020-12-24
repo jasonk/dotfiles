@@ -1,3 +1,1 @@
-if have cmd direnv; then
-  eval "$(direnv hook bash)"
-fi
+if have_cmd direnv; then eval "$(direnv hook bash)"; fi

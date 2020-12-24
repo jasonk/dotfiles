@@ -29,7 +29,13 @@
 --ignore-dir=is:bower_components
 --ignore-dir=is:.meteor
 --ignore-dir=is:.storybook
+--ignore-dir=is:.docusaurus
 --ignore-dir=is:.styleguide
+--ignore-dir=is:build
+--ignore-dir=is:dist
+--ignore-dir=is:OLD
+--ignore-dir=is:mochawesome-report
+--ignore-dir=is:ARCHIVED
 
 --ignore-file=match:/[.]log$/
 
@@ -62,5 +68,6 @@
 --ignore-file=is:webpack.json
 --ignore-file=is:lockdown.json
 --ignore-file=is:settings.json
+--ignore-file=is:tsconfig.tsbuildinfo
 
 --ignore-file=match:/[.]log$/

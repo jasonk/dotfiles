@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# shellcheck disable=SC2086
+
+cd /usr/local/Caskroom || exit
+
+# See https://github.com/Homebrew/homebrew-cask/issues/23869
+
+# Remove all Caskroom/package/.metadata/version/timestamp directories
+# that contain old style casks:
+grep -l "cask :v1 =>" ./*/.metadata/*/*/Casks/*.rb \
+  | xargs -n1 dirname | xargs -n1 dirname \
+  | xargs echo rm -r
+
+# Remove all Caskroom/package/.metadata/version directories that no
+# longer have any children:
+find ./* -mindepth 1 -maxdepth 1 -type d -empty -delete
+
+# Remove all Caskroom/package/version directories that no longer have
+# a corresponding metadata directory:
+for I in */*; do
+  P="$(basename "$(dirname "$I")")"
+  V="$(basename "$I")"
+  if [ ! -e "$P/.metadata/$V" ]; then echo rm -rf "$P/${V}"; fi
+done

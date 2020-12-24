@@ -1,0 +1,2 @@
+#!/bin/bash
+ps -xo pcpu,pid | awk '$1 > 100 {print $2}' | xargs kill

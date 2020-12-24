@@ -26,3 +26,9 @@ have() {
       ;;
   esac
 }
+
+have_cmd() { command -v "$1" >/dev/null; }
+have_command() { command -v "$1" >/dev/null; }
+have_dir() { test -d "$1" >/dev/null; }
+have_directory() { test -d "$1" >/dev/null; }
+have_file() { test -f "$1" >/dev/null; }

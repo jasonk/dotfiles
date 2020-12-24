@@ -1,5 +1,5 @@
 [include]
     path = global-config
     path = aliases
-    path = sourcetree-config
     path = github-config
+    path = mergetool

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+FILE=${1:?Must specify file to find}
+while [ "$(pwd)" != "/" ]; do # ! -e "$FILE" ]; do
+  if [ -e "$(pwd)/$FILE" ]; then
+    echo "$(pwd)/$FILE"
+    exit
+  fi
+  cd ..
+done

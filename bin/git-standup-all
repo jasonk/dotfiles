@@ -1,9 +1,5 @@
 #!/bin/bash
-set -e
-
-DIRS=( "$@" )
-
-if [ "${#DIRS[@]}" -eq 0 ]; then DIRS=( . ); fi
+set -euo pipefail
 
 RED="\033[0;31m"
 LIGHT_RED="\033[1;31m"
@@ -20,25 +16,22 @@ NORMAL=$(tput sgr0)
 
 commits() {
   local REPO="$1"
-  git -C "$REPO" standup | egrep -v '^Seems like' | gsed 's/^[0-9a-f]\+ - //g'
+  git -C "$REPO" standup | grep -Ev '^Seems like' | sed 's/^[0-9a-f]\+ - //g'
 }
 
 standup() {
   local REPO="$1"
+  if ! [ -d "$REPO" ]; then return; fi
+  if ! [ -d "$REPO/.git" ]; then return; fi
   local OUT="$(commits "$REPO")"
-  if [ -n "$OUT" ]; then
+  if [ -n "${OUT:-}" ]; then
     echo -e "${WHITE}${BOLD}$(basename "$REPO")${RESET}"
     echo "$OUT" | sed 's/^\w+ - //'
   fi
 }
 
-for DIR in "${DIRS[@]}"; do
-  (
-    cd "$DIR"
-    for I in *; do
-      [ -d "$I" ] || continue
-      [ -d "$I/.git" ] || continue
-      standup "$I"
-    done
-  )
-done
+if (( $# )); then
+  for DIR in "$@"; do standup "$DIR"; done
+else
+  git-standup-dirs | while IFS= read -r DIR; do standup "$DIR"; done
+fi

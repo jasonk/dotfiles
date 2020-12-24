@@ -1,0 +1,25 @@
+#!/bin/bash
+
+check() {
+  local APP="$1"
+  if [ ! -x "$APP" ]; then APP="$(command -v "$APP")"; fi
+  APP="$(greadlink -f "$APP")"
+  local RES="$(codesign -dv "$APP" 2>/dev/null)"
+  if [ -z "$RES" ]; then
+    echo "$APP: unsigned"
+  elif [[ $RES == *Signature=adhoc* ]]; then
+    echo "$APP: adhoc signature"
+  else
+    echo "$RES"
+  fi
+  if $SIGN; then
+    echo "SIGNING";
+    sudo codesign --force --deep --sign - "$APP"
+  fi
+}
+
+SIGN=false
+if [ "$1" = "--sign" ]; then SIGN=true; shift; fi
+for I in "$@"; do
+  check "$I"
+done

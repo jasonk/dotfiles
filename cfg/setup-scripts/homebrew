@@ -1,0 +1,25 @@
+#!/bin/bash
+# shellcheck source=../utils.sh
+source "$(dirname "$0")/../utils.sh"
+
+URL=""
+
+if have brew; then
+  brew update
+  brew upgrade
+  brew bundle
+  brew cleanup -s
+  brew doctor
+else
+  if is_mac; then
+    # Install homebrew if it isn't already installed
+    URL=https://raw.githubusercontent.com/Homebrew/install/master/install
+  elif is_linux; then
+    PATH=~/.linuxbrew/bin:/usr/local/bin:/usr/bin:/bin
+    unset LD_LIBRARY_PATH PKG_CONFIG_PATH
+    URL=https://raw.github.com/Linuxbrew/linuxbrew/go/install
+  else
+    die "Don't know how to install Homebrew on this system"
+  fi
+  ruby -e "$(curl -fsSL "$URL")";
+fi

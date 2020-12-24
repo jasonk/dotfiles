@@ -1,0 +1,15 @@
+#!/bin/bash
+
+STASHES=( "$@" )
+if [ "${#STASHES[@]}" -eq 0 ]; then
+  STASHES=($(git stash list | sed 's/:.*//'))
+fi
+
+for STASH in "${STASHES[@]}"; do
+  HASH="$(git rev-parse --short "$STASH")"
+  NAME="$(echo -n "$STASH:$HASH" | tr -cs '[[:alnum:]]' '-')"
+  echo "$STASH: $HASH -> $NAME"
+  git show "$HASH" > "$NAME.patch"
+done
+
+# git stash clear

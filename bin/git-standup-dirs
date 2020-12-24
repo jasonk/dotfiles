@@ -1,0 +1,11 @@
+#!/bin/bash
+
+find() { command find "$1" -type d -name .git | xargs dirname; }
+
+git config --global --get-all standup.dirs | while IFS= read -r GLOB; do
+  GLOB="${GLOB/#\~/$HOME}"
+  # shellcheck disable=SC2086
+  ls -d $GLOB
+done | while IFS= read -r DIR; do
+  if [ -d "$DIR" ] && [ -d "$DIR/.git" ]; then echo "$DIR"; fi
+done

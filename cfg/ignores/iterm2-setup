@@ -1,0 +1,22 @@
+# These are utilities that the setup/download-iterm2-utils script will
+# download and install so they don't need to be in the repo.  This
+# file is also used to populate the list of utilities for that script
+# to download, so that they don't have to be listed in two different
+# places
+/bin/imgls
+/bin/imgcat
+/bin/it2dl
+/bin/divider
+/bin/imgcat
+/bin/imgls
+/bin/it2api
+/bin/it2attention
+/bin/it2check
+/bin/it2copy
+/bin/it2dl
+/bin/it2getvar
+/bin/it2git
+/bin/it2setcolor
+/bin/it2setkeylabel
+/bin/it2ul
+/bin/it2universion

@@ -1,0 +1,4 @@
+#!zsh
+
+PKGJSON="$(find_up package.json)"
+[ -n "$PKGJSON" ]

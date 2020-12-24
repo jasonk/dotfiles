@@ -1,0 +1,18 @@
+#!/bin/bash
+# .git/hooks/commit-msg
+
+if [ -n "$TICKET_RE" ]; then
+  FILE="$1"
+
+  BRANCH="$(git symbolic-ref --short HEAD)"
+  BRANCH="${BRANCH%%/*}"
+
+  # If the branch name looks like a ticket number, then we make sure the
+  # message starts with the ticket number
+  if [[ $BRANCH =~ ^${TICKET_RE}$ ]]; then
+    MSG="$(head -1 "$FILE")"
+    if ! [[ $MSG =~ ${BRANCH}* ]]; then
+      sed -i.bak -e "1s/^/$BRANCH - /" "$FILE"
+    fi
+  fi
+fi

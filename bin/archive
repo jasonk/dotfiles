@@ -1,0 +1,20 @@
+#!/bin/bash
+
+REPO="$(git rev-parse --show-toplevel)"
+ARCHIVE="${REPO}/ARCHIVED"
+
+if ! grep -q '/ARCHIVED' "$REPO/.git/info/exclude"; then
+  echo '/ARCHIVED' >> "$REPO/.git/info/exclude"
+fi
+
+for SRC in "$@"; do
+  ABS="$(realpath "$SRC" --relative-to "$REPO")"
+  TGT="$ARCHIVE/$ABS"
+  if [ -e "$TGT" ]; then
+    echo "$TGT already exists, skipping $SRC" 1>&2
+    continue
+  fi
+  mkdir -p "$(dirname "$TGT")"
+  mv "$SRC" "$TGT"
+  echo "ARCHIVE: $SRC -> $TGT"
+done

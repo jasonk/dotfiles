@@ -2,3 +2,5 @@
 # to each machine.
 /.gitconfig
 /.goto
+/.env
+/.env.d

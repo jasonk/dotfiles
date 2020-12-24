@@ -2,11 +2,7 @@
 # warns if the canary does not appear on the last line of the file.
 # This helps to detect when automated installers modify your
 # initialization files without asking.
-#
-# The naughty list so far:
-#   rvm
-#   Heroku Toolbelt
-#   Sencha Cmd
+
 check_canary() {
   for FILE in "$@"; do
     local CANARY="$(tail -1 "$FILE")"

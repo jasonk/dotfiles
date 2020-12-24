@@ -2,9 +2,7 @@
 
 export CLICOLOR=1
 
-if [ "$TERM" = "xterm" ]; then
-    export TERM=xterm-color
-fi
+if [ "$TERM" = "xterm" ]; then export TERM=xterm-color; fi
 
 # Darwin uses this one
 export LSCOLORS="Cxfxcxdxbxegedabagacad"

@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+
+if [ "$(basename "$1")" != "PULLREQ_EDITMSG" ]; then
+  # shellcheck disable=SC2086 # we want word-splitting if $EDITOR has args
+  exec $EDITOR "$@"
+fi
+
+FILE="$1"
+DIR="$(dirname "$FILE")"
+
+die() { echo "$1 exited with non-zero exit code" 1>&2; exit 1; }
+
+BEFORE="prepare-pull-request-msg"
+AFTER="pull-request-msg"
+
+if [ -x "$DIR/hooks/$BEFORE" ]; then
+  "$DIR/hooks/$BEFORE" "$FILE" || die "$BEFORE"
+fi
+
+"$EDITOR" "$FILE" || die "$EDITOR"
+
+if [ -x "$DIR/hooks/$AFTER" ]; then
+  "$DIR/hooks/$AFTER" "$FILE" || die "$AFTER"
+fi

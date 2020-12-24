@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require 'json'
+
+unless ENV['VAULT_ADDR']
+  STDERR.puts 'Missing $VAULT_ADDR'
+  exit 100
+end
+
+begin
+  tokens = JSON.parse(File.read("#{ENV['HOME']}/.vault_tokens"))
+rescue Errno::ENOENT
+  tokens = {}
+end
+
+case ARGV.first
+when 'get'
+  print tokens[ENV['VAULT_ADDR']] if tokens[ENV['VAULT_ADDR']]
+  exit 0
+when 'store'
+  tokens[ENV['VAULT_ADDR']] = STDIN.read
+when 'erase'
+  tokens.delete!(ENV['VAULT_ADDR'])
+end
+
+File.open("#{ENV['HOME']}/.vault_tokens", 'w') {
+  |file| file.write(tokens.to_json)
+}

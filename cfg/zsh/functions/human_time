@@ -1,0 +1,20 @@
+#!zsh
+
+
+# Stolen from https://github.com/sindresorhus/pure/blob/master/pure.zsh
+local tmp=$1 var=$2
+local days=$(( tmp / 60 / 60 / 24 ))
+local hours=$(( tmp / 60 / 60 % 24 ))
+local minutes=$(( tmp / 60 % 60 ))
+local seconds=$(( tmp % 60 ))
+local -a result
+(( $days    > 0 )) && result=( "${days}d" )
+(( $hours   > 0 )) && result=( $result "${hours}h" )
+(( $minutes > 0 )) && result=( $result "${minutes}m" )
+(( $seconds > 0 )) && result=( $result "${seconds}s" )
+local human="${(j. .)result}"
+if [ -n "$var" ]; then
+  typeset -g "${var}"="${human}"
+else
+  print -n "${human}"
+fi

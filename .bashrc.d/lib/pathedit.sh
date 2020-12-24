@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 patheditor_clean_duplicates() {
   local saw=":"

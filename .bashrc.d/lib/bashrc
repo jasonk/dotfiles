@@ -1,40 +1,49 @@
 # .bashrc
+# shellcheck disable=SC2090
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then . /etc/bashrc; fi
+if [ -f /etc/bashrc ]; then source /etc/bashrc; fi
 
 source_scripts() {
   local script
   local dir
   for dir in "$@"; do
-    pushd $dir > /dev/null || break
+    pushd "$dir" > /dev/null || break
     for script in *.sh; do
-      if [ -f "$script" ]; then source "$script"; fi
+      if [ ! -f "$script" ]; then continue; fi
+      # shellcheck disable=SC1090
+      source "$script"
     done
     popd > /dev/null || break
   done
 }
 
-source_scripts $HOME/.bashrc.d/lib
+source_scripts "$HOME/.bashrc.d/lib"
+
+if [ -x /usr/libexec/path_helper ]; then
+  eval "$(/usr/libexec/path_helper -s)";
+fi
 
 pathedit --prepend ~/bin ~/tools/bin /usr/local/bin
 manpathedit --prepend /usr/local/share/man
 
-source_scripts $HOME/.bashrc.d
+source_scripts "$HOME/.bashrc.d"
 
 pathedit --clean-duplicates
 manpathedit --clean-duplicates
 cdpathedit --clean-duplicates
 perl5libedit --clean-duplicates
 
-check_canary $HOME/.bashrc $HOME/.profile
+source_scripts "$HOME/.bashrc.d/$(uname)"
 
-#if [ "$TERM_PROGRAM" = "Apple_Terminal" ]; then
-# ssh() {
-#   SetTerminalStyle ssh
-#   /usr/bin/ssh "$@"
-#   SetTerminalStyle default
-# }
-#fi
+hostname="$(hostname -s)"
+if [ -f "$HOME/.bashrc.d/hostname.d/$hostname" ]; then
+  # shellcheck disable=SC1090
+  . "$HOME/.bashrc.d/hostname.d/$hostname"
+fi
+
+# shellcheck source=~/.bashrc.d/lib/support/bash-preexec.sh
+source "$HOME/.bashrc.d/lib/support/bash-preexec.sh"
+check_canary "$HOME/.bashrc" "$HOME/.profile" "$HOME/.bash_profile"
 
 ## END OF FILE ##

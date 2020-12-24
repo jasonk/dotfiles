@@ -5,4 +5,4 @@
   # The actual P4Merge tool that it wraps can be found in the 'P4V' package
   # you can download for free from
   #   http://www.perforce.com/perforce/downloads/index.html
-  tool = p4merge
+  #tool = p4merge

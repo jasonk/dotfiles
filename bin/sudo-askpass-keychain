@@ -1,0 +1,10 @@
+#!/bin/bash
+# This askpass utility retrieves a sudo password from the Mac keychain.
+# It assumes that sudo passwords can be located using the service name
+# "sudo passwords" and that the account name will be "sudo:<hostname>"
+# for a given host.
+
+# Note that you can easily add your sudo password to your keychain by
+# using this exact same command and just replacing
+# `find-generic-password` with `add-generic-password`
+security find-generic-password -s "sudo passwords" -a "sudo:$(hostname)" -w

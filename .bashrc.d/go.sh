@@ -1,4 +1,4 @@
 #!/bin/bash
 
-export GOPATH=$HOME/gocode
-pathedit --append $GOPATH/bin
+export GOPATH="$HOME/gocode"
+pathedit --append "$GOPATH/bin"

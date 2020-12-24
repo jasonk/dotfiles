@@ -3,6 +3,6 @@
 #pathedit --append "$HOME/.gems/bin"
 #pathedit --append "$HOME/.gem/ruby/2.0.0/bin"
 
-#if have cmd ruby && have cmd gem && ! have cmd rvm; then
+#if have_cmd ruby && have_cmd gem && ! have_cmd rvm; then
 #  pathedit --append "$(ruby -rubygems -e 'puts Gem.user_dir')/bin"
 #fi

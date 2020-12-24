@@ -1,8 +1,10 @@
+# vim:syntax=gitconfig
 [alias]
 b = branch
 recent = branch --sort=committerdate
 c = checkout
 co = commit
+up = !git commit -am updates && git push origin
 d = diff -b
 dc = diff -b --cached
 ds = diff -b --stat
@@ -41,3 +43,5 @@ llog = log --date=local
 
 # Run gitk for conflict resolution
 gitkconflict = !gitk --left-right HEAD..MERGE_HEAD
+
+history = log --follow -p --

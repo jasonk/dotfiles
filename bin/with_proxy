@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export http_proxy="$1" ; shift
+export HTTP_PROXY="$http_proxy"
+export https_proxy="$http_proxy"
+export HTTPS_PROXY="$http_proxy"
+
+exec "$@"

@@ -17,3 +17,17 @@
 /.serverauth.*
 /.Xauthority
 /.linodecli
+/.config/hub
+/.anyconnect
+/.android
+/.expo
+/.config/puppet/analytics.yml
+/.config/gatsby/config.json
+/.vault
+/.vault_tokens
+/.config/verdaccio/config.yaml
+/.op
+/.config/gh/hosts.yml
+/.aspnet/DataProtection-Keys
+/.flyrc
+/.kube/config

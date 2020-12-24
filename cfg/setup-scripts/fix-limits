@@ -1,0 +1,49 @@
+#!/bin/bash
+# shellcheck source=../utils.sh disable=SC2155
+source "$(dirname "$0")/../utils.sh"
+
+skip_unless_mac
+require_root
+
+fix_limit() {
+
+local name="$1"
+local flag="$2"
+local soft="$3"
+local hard="${4:-$soft}"
+local file="/Library/LaunchDaemons/limit.${name}.plist"
+
+local cursoft="$(ulimit -S${flag})"
+local curhard="$(ulimit -H${flag})"
+
+if [ "$curhard" -ge $hard ] && [ "$cursoft" -ge $soft ]; then return; fi
+
+cat <<END > "$file"
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>limit.${name}</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>launchctl</string>
+      <string>limit</string>
+      <string>${name}</string>
+      <string>${soft}</string>
+      <string>${hard}</string>
+    </array>
+    <key>RunAtLoad</key><true/>
+    <key>ServiceIPC</key><false/>
+  </dict>
+</plist>
+END
+
+chown root:wheel "$file"
+launchctl load -w "$file"
+
+}
+
+fix_limit maxfiles n 65536
+fix_limit maxproc u 2048

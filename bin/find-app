@@ -1,0 +1,8 @@
+#!/bin/bash
+# Give the name of a .app (like you might pass to `open -a`), this
+# will find where it is installed.
+
+/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/Support/lsregister -dump \
+  | grep -o "/.*$1.app" \
+  | grep -v -E "Caches|TimeMachine|Temporary|/Volumes/${NAME_APP}" \
+  | uniq

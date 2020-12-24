@@ -1,0 +1,10 @@
+#!zsh
+
+(
+  local FILE=$1
+  while [ ! -e "$FILE" ]; do
+    if [ "$(pwd)" = "/" ]; then return; fi
+    cd ..
+    echo "$(pwd)/$FILE"
+  done
+)

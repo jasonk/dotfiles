@@ -1,0 +1,20 @@
+[merge]
+  tool = vimdiff
+#  guitool = sourcetree
+#  conflictstyle = diff3
+
+#[mergetool]
+#  prompt = false
+#  keepbackup = false
+#  log = true
+#
+#[mergetool "vimdiff"]
+#  cmd = vimdiff
+#  conflictstyle = diff3
+#
+#[difftool "sourcetree"]
+#  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+#
+#[mergetool "sourcetree"]
+#  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+#  trustExitCode = true
