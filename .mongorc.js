@@ -32,7 +32,7 @@ function csvrow( arr ) {
 }
 function printcsv( arr ) { print( csvrow( arr ) ); }
 
-DBQuery.prototype.toCSV = DBCommandCursor.prototype.toCSV = toCSV;
+DBQuery.prototype.toCSV = DBCommandCursor.prototype.toCSV = Array.prototype.toCSV = toCSV;
 function toCSV( opts={} ) {
   const { columns = [], headers = true } = opts;
 
