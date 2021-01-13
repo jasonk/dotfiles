@@ -69,3 +69,4 @@
 /.rbenv
 /.vscode/argv.json
 /.vscode/extensions
+/.zsh_sessions

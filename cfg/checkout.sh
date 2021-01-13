@@ -41,6 +41,9 @@ trap "exit 1"         HUP INT PIPE QUIT TERM
 # shellcheck disable=SC2064
 trap "rm -rf $TMPDIR" EXIT
 
+export GIT_DIR="$HOME/.cfg"
+export GIT_WORK_TREE="$HOME"
+
 # Clone the repo and put the git data into ~/.cfg and the work tree
 # into a temporary directory
 git clone --separate-git-dir="$HOME/.cfg" "$REPO" "$TMPDIR"
@@ -48,7 +51,7 @@ git clone --separate-git-dir="$HOME/.cfg" "$REPO" "$TMPDIR"
 # For any file that is currently reported as 'deleted' (because it
 # didn't exist in your home directory) we just check it out from the
 # repo to populate it.
-git --git-dir="$HOME/.cfg" --work-tree="$HOME" status -uno --porcelain \
+git status -uno --porcelain \
   | sed -n 's/^ D //p' \
   | tr '\n' '\0' \
   | xargs -0 git checkout --
