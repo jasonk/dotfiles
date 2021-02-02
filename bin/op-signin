@@ -12,7 +12,7 @@
 cd "$HOME" || exit 1
 mkdir -p .env.d
 if [ -n "$OP_SIGNIN_DOMAIN" ]; then
-  op signin "$OP_SIGNIN_DOMAIN" > .env.d/1password-cli.sh;
+  op signin "$OP_SIGNIN_DOMAIN" > .env.d/1password-cli.env;
 else
   echo "No signin domain found" 1>&2
   exit 1
