@@ -4,6 +4,8 @@
 <dict>
 	<key>AllowClipboardAccess</key>
 	<false/>
+	<key>BracketedPasteMode</key>
+	<true/>
 	<key>CommandSelection</key>
 	<true/>
 	<key>ConvertDosNewlines</key>
