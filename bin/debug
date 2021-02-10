@@ -1,0 +1,162 @@
+#!/usr/bin/env bash
+# (C) 2012 Jason Kohles <email@jasonkohles.com>
+# Released under MIT license
+#
+# This script helps you manage your DEBUG environment variable, as
+# used by https://www.npmjs.com/package/debug (and possibly others).
+# In a big project you may end up with hundreds or thousands of debug
+# categories, and it can become painful to keep track of which ones
+# you were using when switching between projects.
+# This script helps by maintaining a directory of "debug collections"
+# and making it easy to show/hide/delete entries from each collection,
+# and also to enable/disable debugging as a whole.
+# It works by managing a directory named `debug.collections` that
+# contains all your different collections (if the directory is empty
+# it creates a collection named `default`).  There is also
+# a `debug.options` symlink that points at the active collection. When
+# you enable debugging, it uses the contents of the active collection
+# file to build a `DEBUG` variable and drop it into an environment
+# file.  It's assumed you use something like `direnv`
+# (https://direnv.net/) to load environment variables that will
+# include loading the location that the script dumps to.
+set -eo pipefail
+cd "$(dirname "$0")/.."
+
+DIR="$HOME/cfg"
+TGT="${DEBUG_ENV_TARGET_FILE:-$HOME/.env/debug.env}"
+
+ENABLED=()
+DISABLED=()
+
+update() { printf 'DEBUG=%q\n' "$(dump)" > "$TGT"; }
+enable() { update; echo "DEBUG enabled" 1>&2; }
+disable() { truncate -s0 "$TGT"; echo "DEBUG disabled" 1>&2; }
+
+load() {
+  while IFS='' read -r LINE; do
+    if [ "${LINE:0:0}" = "#" ]; then
+      : # do nothing
+    elif [ "${LINE:0:1}" = "-" ]; then
+      DISABLED+=( "$LINE" )
+    else
+      ENABLED+=( "$LINE" )
+    fi
+  done < "$DIR/debug.options"
+}
+
+list() { cd "$DIR/debug.collections"; ls -1; }
+
+switch() {
+  touch "$DIR/debug.collections/$1"
+  ln -sf "$DIR/debug.collections/$1" "$DIR/debug.options";
+}
+
+dump() {
+  ALL=( "${ENABLED[@]}" "${DISABLED[@]}" )
+  IFS=","
+  echo "${ALL[*]}"
+}
+
+current() { basename "$(readlink "$DIR/debug.options")"; }
+is_enabled() { test -s "$TGT"; }
+is_disabled() { ! is_enabled; }
+
+report() {
+  echo ""
+  echo "Current debug collection: $(current)"
+  echo ""
+  echo "Enabled:"
+  for I in "${ENABLED[@]}"; do echo -e "  - \e[32m$I\e[0m"; done
+  echo ""
+  echo "Disabled:"
+  for I in "${DISABLED[@]}"; do echo -e "  - \e[31m${I#-}\e[0m"; done
+  echo ""
+  if is_disabled; then
+    echo -e "      \e[31;1m**********************"
+    echo -e "      \e[31;1m*** DEBUG DISABLED ***"
+    echo -e "      \e[31;1m**********************"
+    echo ""
+  fi
+}
+
+del() {
+  cp "$DIR/debug.options" "$DIR/debug.options.tmp"
+  grep -v -f <(echo "$@") "$DIR/debug.options.tmp" | sort | uniq \
+    > "$DIR/debug.options"
+}
+
+hide() {
+  local ITEMS=( "${@#-}" )
+  cp "$DIR/debug.options" "$DIR/debug.options.tmp"
+  (
+    grep -v -f <(echo "${ITEMS[@]}"; echo "${ITEMS[@]/#/-}") \
+      "$DIR/debug.options.tmp"
+    for I in "$@"; do echo "-$I"; done
+  ) | sort | uniq > "$DIR/debug.options"
+}
+
+show() {
+  local ITEMS=( "$@" )
+  cp "$DIR/debug.options" "$DIR/debug.options.tmp"
+  (
+    grep -v -f <(echo "${ITEMS[@]}"; echo "${ITEMS[@]/#/-}") \
+      "$DIR/debug.options.tmp"
+    for I in "$@"; do echo "$I"; done
+  ) | sort | uniq > "$DIR/debug.options"
+}
+import() {
+  local X
+  for X in "$@"; do
+    cat "$DIR/debug.collections/$X" >> "$DIR/debug.options"
+  done
+}
+edit() {
+  local NAME="$1"
+  if [ -z "$NAME" ]; then NAME="$(current)"; fi
+  ${EDITOR:-vi} "$DIR/debug.collections/$NAME"
+}
+
+help() {
+cat <<'END'
+Usage: debug [option]
+
+If called with no options will just report the current debug settings.
+
+  --enable            Enable debug logging
+  --disable           Disable debug logging
+  --switch <name>     Change the active debug collection
+  --show <pattern..>  Show these patterns (add them to $DEBUG)
+  --hide <pattern..>  Show these patterns (add them to $DEBUG prefixed with -)
+  --del <pattern..>   Delete these patterns (remove them from $DEBUG)
+                      Aliases: --remove --rm
+  --dump              Print the current $DEBUG string
+  --edit [name]       Open a debug collection in your $EDITOR.  If no name is
+                      provided the currently active one will be edited.
+  --import [name..]   Import one (or more) of your other collections
+                      into the current collection (by concatenting
+                      their contents onto the end of the current
+                      collection)
+  --help              Show this help message
+END
+}
+if [ ! -d "$DIR/debug.collections" ]; then mkdir "$DIR/debug.collections"; fi
+if [ ! -f "$DIR/debug.collections/default" ]; then
+  touch "$DIR/debug.collections/default";
+fi
+if [ ! -h "$DIR/debug.options" ]; then switch default; fi
+case "$1" in
+  --enable) enable ; exit ;;
+  --disable) disable ; exit ;;
+  --list) shift 1 ; list ; exit ;;
+  --switch) shift 1 ; switch "$@" ; load ; report ;;
+  --show) shift 1 ; show "$@" ; load ; report ;;
+  --hide) shift 1 ; hide "$@" ; load ; report ;;
+  --del|--remove|--rm) shift 1 ; del "$@" ; load ; report ;;
+  --dump) shift 1 ; load ; dump ;;
+  --help) shift 1 ; help "$@" ; exit 0 ;;
+  --edit) shift 1 ; edit "$@" ;;
+  --update) shift 1 ; update ;;
+  --import) shift 1 ; import "$@" ; load ; report ;;
+  -*) help ; exit 1 ;;
+  *) load ; report ;;
+esac
