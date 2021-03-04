@@ -16,6 +16,13 @@ Object.assign( DBQuery.prototype, {
 // DBCollection is what you get from `db.whatever`.  Things added here
 // get added in the same way as things like `find` and `insert`.
 Object.assign( DBCollection.prototype, {
+  getAllFieldNames() {
+    return db[ this._shortName ].aggregate( [
+      { $project : { x : { $objectToArray : "$$ROOT" } } },
+      { $unwind : "$x" },
+      { $group : { _id : null, keys : { $addToSet : "$x.k" } } },
+    ] ).toArray()[0].keys.sort();
+  },
 } );
 
 // control batch size (how many are shown before you have to type `it`)
@@ -36,8 +43,9 @@ DBQuery.prototype.toCSV = DBCommandCursor.prototype.toCSV = toCSV;
 function toCSV( opts={} ) {
   const { columns = [], headers = true } = opts;
 
-  this.forEach( ( rec, idx ) => {
-    if ( ! idx ) {
+  let idx = 0;
+  this.forEach( ( rec ) => {
+    if ( ! idx++ ) {
       if ( ! columns.length ) columns.push( ...Object.keys( rec ) );
       if ( headers === true ) printcsv( columns );
       if ( Array.isArray( headers ) ) printcsv( headers );
