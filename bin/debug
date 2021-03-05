@@ -28,7 +28,7 @@ TGT="${DEBUG_ENV_TARGET_FILE:-$HOME/.env/debug.env}"
 ENABLED=()
 DISABLED=()
 
-update() { printf 'DEBUG=%q\n' "$(dump)" > "$TGT"; }
+update() { printf 'DEBUG="%s"\n' "$(dump)" > "$TGT"; }
 enable() { update; echo "DEBUG enabled" 1>&2; }
 disable() { truncate -s0 "$TGT"; echo "DEBUG disabled" 1>&2; }
 
@@ -85,24 +85,28 @@ del() {
     > "$DIR/debug.options"
 }
 
+modify() {
+  local ITEMS=( "$@" )
+  cp "$DIR/debug.options" "$DIR/debug.options.tmp"
+  local REMOVE=( "${ITEMS[@]#-}" ); # all items with leading dashes removed
+  REMOVE+=( "${REMOVE[@]/#/-}" ); # and with leading dashes added
+  (
+    grep -vF <( echo "${REMOVE[@]}" ) "$DIR/debug.options.tmp";
+    echo "${ITEMS[@]}";
+  ) | xargs -n1 | sort | uniq > "$DIR/debug.options"
+  update
+}
+
 hide() {
   local ITEMS=( "${@#-}" )
-  cp "$DIR/debug.options" "$DIR/debug.options.tmp"
-  (
-    grep -v -f <(echo "${ITEMS[@]}"; echo "${ITEMS[@]/#/-}") \
-      "$DIR/debug.options.tmp"
-    for I in "$@"; do echo "-$I"; done
-  ) | sort | uniq > "$DIR/debug.options"
+  # Make sure every item has a single leading dash
+  ITEMS=( "${ITEMS[@]/#/-}" );
+  modify "${ITEMS[@]}"
 }
 
 show() {
   local ITEMS=( "$@" )
-  cp "$DIR/debug.options" "$DIR/debug.options.tmp"
-  (
-    grep -v -f <(echo "${ITEMS[@]}"; echo "${ITEMS[@]/#/-}") \
-      "$DIR/debug.options.tmp"
-    for I in "$@"; do echo "$I"; done
-  ) | sort | uniq > "$DIR/debug.options"
+  modify "${ITEMS[@]}"
 }
 import() {
   local X
@@ -144,19 +148,20 @@ if [ ! -f "$DIR/debug.collections/default" ]; then
   touch "$DIR/debug.collections/default";
 fi
 if [ ! -h "$DIR/debug.options" ]; then switch default; fi
+load
 case "$1" in
   --enable) enable ; exit ;;
   --disable) disable ; exit ;;
   --list) shift 1 ; list ; exit ;;
-  --switch) shift 1 ; switch "$@" ; load ; report ;;
-  --show) shift 1 ; show "$@" ; load ; report ;;
-  --hide) shift 1 ; hide "$@" ; load ; report ;;
-  --del|--remove|--rm) shift 1 ; del "$@" ; load ; report ;;
-  --dump) shift 1 ; load ; dump ;;
+  --switch) shift 1 ; switch "$@" ;;
+  --show) shift 1 ; show "$@" ;;
+  --hide) shift 1 ; hide "$@" ;;
+  --del|--remove|--rm) shift 1 ; del "$@" ;;
+  --dump) shift 1 ; dump ;;
   --help) shift 1 ; help "$@" ; exit 0 ;;
   --edit) shift 1 ; edit "$@" ;;
   --update) shift 1 ; update ;;
-  --import) shift 1 ; import "$@" ; load ; report ;;
+  --import) shift 1 ; import "$@" ;;
   -*) help ; exit 1 ;;
-  *) load ; report ;;
 esac
+report
