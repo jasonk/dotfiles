@@ -1,5 +1,6 @@
 #!/bin/bash
 set -euo pipefail
+set -x
 
 PREFIX="qpr-"
 DIR="$(cd "$(git rev-parse --show-toplevel)/.." && pwd)"
@@ -7,20 +8,20 @@ UPSTREAM="upstream"
 ORIGIN="origin"
 COMMITS=()
 MAIN="master"
-DROP=false
+STAGED=false
 
 usage() {
 cat <<'END'
-Usage: git qpr [options] <commit..>
+Usage: git qpr [options] [commit..]
 
 Extract some commits from the current repo and turn them into
-a pull-request.
+a pull-request. (qpr = quick pull request)
 
 Options:
 
-  --drop
-    Drop the commits from the current repo after submitting the
-    pull-request.
+  --staged
+    Make a PR from the currently staged changes instead of (or in
+    addition to) one or more commits.
   --dir <directory>
     Specify the directory to put the temporary worktree in.  Default
     is to make it a sibling of the current worktree.
@@ -42,7 +43,7 @@ END
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    --drop)       DROP=true          ; shift 1 ;;
+    --staged)     STAGED=true        ; shift 1 ;;
     --dir)        DIR="$2"           ; shift 2 ;;
     --dir=*)      DIR="${1#*=}"      ; shift 1 ;;
     --upstream)   UPSTREAM="$2"      ; shift 2 ;;
@@ -67,17 +68,20 @@ if [ -e "$TREE" ]; then
 fi
 
 git fetch "$UPSTREAM"
-git worktree add "$TREE" "$UPSTREAM/$MAIN"
+git worktree add "$TREE"
+MYDIR="$(pwd)"
 (
   cd "$TREE"
+  git reset --hard "$UPSTREAM/$MAIN"
   for COMMIT in "${COMMITS[@]}"; do git cherry-pick "$COMMIT"; done
 
+  if $STAGED; then git -C "$MYDIR" diff --staged | git apply; fi
   git push -u "$ORIGIN" "$NAME"
   if command -v hub >/dev/null 2>/dev/null; then hub pull-request; fi
 )
 
-if $DROP; then
-  for COMMIT in "${COMMITS[@]}"; do
-    git rebase --autostash --rebase-merges --onto "${COMMIT}^" "${COMMIT}"
-  done
-fi
+#if $DROP; then
+#  for COMMIT in "${COMMITS[@]}"; do
+#    git rebase --autostash --rebase-merges --onto "${COMMIT}^" "${COMMIT}"
+#  done
+#fi
