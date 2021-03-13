@@ -3,3 +3,8 @@
     path = aliases
     path = github-config
     path = mergetool
+[init]
+	defaultBranch = main
+[user]
+	name = Jason Kohles
+	email = email@jasonkohles.com

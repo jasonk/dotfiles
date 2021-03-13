@@ -27,6 +27,8 @@
 #--type-add=perl:firstlinematch:/^#!.*\bperl/
 
 --ignore-dir=is:bower_components
+--ignore-dir=is:.next
+--ignore-dir=is:.direnv
 --ignore-dir=is:.meteor
 --ignore-dir=is:.storybook
 --ignore-dir=is:.docusaurus
