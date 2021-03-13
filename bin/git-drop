@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Drop a commit
+# git rebase --autostash --rebase-merges --onto SHA^ SHA
+# git rebase --onto SHA~ SHA
+
+usage() {
+cat <<'END'
+Usage: git drop <commit..>
+
+Drop some commits from the current branch.
+END
+}
+
+for COMMIT in "$@"; do
+  git rebase --autostash --rebase-merges --onto "${COMMIT}^" "${COMMIT}"
+done

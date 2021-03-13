@@ -1,0 +1,87 @@
+#!/bin/bash
+set -euo pipefail
+set -x
+
+PREFIX="qpr-"
+DIR="$(cd "$(git rev-parse --show-toplevel)/.." && pwd)"
+UPSTREAM="upstream"
+ORIGIN="origin"
+COMMITS=()
+MAIN="master"
+STAGED=false
+
+usage() {
+cat <<'END'
+Usage: git qpr [options] [commit..]
+
+Extract some commits from the current repo and turn them into
+a pull-request. (qpr = quick pull request)
+
+Options:
+
+  --staged
+    Make a PR from the currently staged changes instead of (or in
+    addition to) one or more commits.
+  --dir <directory>
+    Specify the directory to put the temporary worktree in.  Default
+    is to make it a sibling of the current worktree.
+  --upstream <upstream-name>
+    The name of the upstream remote.  Default is 'upstream'.
+  --origin <origin-name>
+    The name of the origin remote.  Default is 'origin'.
+  --prefix <prefix-string>
+    String to prefix the temporary worktree (and therefore temporary
+    branch) with.  Default is 'qpr-'.
+  --main <main-branch-name>
+    The name of the main branch in the upstream repo.  This is the
+    branch that PRs will be opened against.  (Default is 'master').
+
+Note that this requires the GitHub 'hub' CLI tool (and it must be
+configured) in order to open the pull-request.
+END
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --staged)     STAGED=true        ; shift 1 ;;
+    --dir)        DIR="$2"           ; shift 2 ;;
+    --dir=*)      DIR="${1#*=}"      ; shift 1 ;;
+    --upstream)   UPSTREAM="$2"      ; shift 2 ;;
+    --upstream=*) UPSTREAM="${1#*=}" ; shift 1 ;;
+    --origin)     ORIGIN="$2"        ; shift 2 ;;
+    --origin=*)   ORIGIN="${1#*=}"   ; shift 1 ;;
+    --prefix)     PREFIX="$2"        ; shift 2 ;;
+    --prefix=*)   PREFIX="${1#*=}"   ; shift 1 ;;
+    --main)       MAIN="$2"          ; shift 2 ;;
+    --main=*)     MAIN="${1#*=}"     ; shift 1 ;;
+    -*)           usage              ;  exit 1 ;;
+    *)            COMMITS+=( "$1" )  ; shift 1 ;;
+  esac
+done
+
+NAME="${PREFIX}$(date +%s)"
+
+TREE="${DIR}/${NAME}"
+if [ -e "$TREE" ]; then
+  echo "Something already exists at '$TREE'" 1>&2
+  exit 1
+fi
+
+git fetch "$UPSTREAM"
+git worktree add "$TREE"
+MYDIR="$(pwd)"
+(
+  cd "$TREE"
+  git reset --hard "$UPSTREAM/$MAIN"
+  for COMMIT in "${COMMITS[@]}"; do git cherry-pick "$COMMIT"; done
+
+  if $STAGED; then git -C "$MYDIR" diff --staged | git apply; fi
+  git push -u "$ORIGIN" "$NAME"
+  if command -v hub >/dev/null 2>/dev/null; then hub pull-request; fi
+)
+
+#if $DROP; then
+#  for COMMIT in "${COMMITS[@]}"; do
+#    git rebase --autostash --rebase-merges --onto "${COMMIT}^" "${COMMIT}"
+#  done
+#fi

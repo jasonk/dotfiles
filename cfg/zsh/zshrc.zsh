@@ -38,6 +38,7 @@ function source_all() { for config ($ZSH_DIR/$1/*.zsh) source $config }
 
 source_all libs
 source_all configs
+for module ($ZSH_DIR/modules/*) source $module/init.zsh
 
 case "$OSTYPE" in
   darwin*) source_all configs/mac  ;;

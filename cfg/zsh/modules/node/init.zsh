@@ -9,8 +9,8 @@ elif (( $+commands[brew] )) && [[ -d "$(brew --prefix nvm 2>/dev/null)" ]]; then
   source $(brew --prefix nvm)/nvm.sh
 
 # Return if requirements are not found.
-#elif (( ! $+commands[node] )); then
-#  return 1
+elif (( ! $+commands[node] )); then
+  return 1
 fi
 
 # Load NPM completion.

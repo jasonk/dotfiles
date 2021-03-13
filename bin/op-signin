@@ -1,18 +1,18 @@
 #!/bin/bash
 # Sign in to 1password-cli and dump the token information into the
-# .env.d directory (which gets loaded by the `.envrc` file in my home
+# ~/.env directory (which gets loaded by the `.envrc` file in my home
 # directory)
 # To use this you have to follow the setup instructions in the docs
 # https://support.1password.com/command-line-getting-started/ and then
 # add your 'shortcut' to your environment in `$OP_SIGNIN_DOMAIN`.
 # After that you can just use `op-signin` instead of `op signin` and
 # the signin information will get added to your environment files in
-# `~/.env.d`
+# `~/.env`
 
 cd "$HOME" || exit 1
-mkdir -p .env.d
+mkdir -p .env
 if [ -n "$OP_SIGNIN_DOMAIN" ]; then
-  op signin "$OP_SIGNIN_DOMAIN" > .env.d/1password-cli.sh;
+  op signin "$OP_SIGNIN_DOMAIN" > .env/1password-cli.env;
 else
   echo "No signin domain found" 1>&2
   exit 1

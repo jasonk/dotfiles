@@ -23,6 +23,8 @@ squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\
 ri = rebase --interactive --autosquash
 rbu = !git fetch upstream && git rebase upstream/master --autostash
 rbo = !git fetch origin && git rebase origin/master --autostash
+mu = !git fetch upstream && git merge upstream/master --autostash --no-edit
+mo = !git fetch origin && git merge origin/master --autostash --no-edit
 wdiff = diff --color-words
 ignore = update-index --assume-unchanged
 unignore = update-index --no-assume-unchanged
