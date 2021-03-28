@@ -6,8 +6,8 @@ echo "$@"
 REPO="jasonk/dotfiles"
 BRANCH="master"
 
-# CFGURL="https://raw.githubusercontent.com/$REPO/$BRANCH/cfg"
-CFGURL="file:///Users/jason/cfg"
+CFGURL="https://raw.githubusercontent.com/$REPO/$BRANCH/cfg"
+#CFGURL="file://$HOME/cfg" # For Dev
 
 if ! command -v brew 2>/dev/null 1>/dev/null; then
   HBURL="https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh"
