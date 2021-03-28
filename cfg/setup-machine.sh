@@ -1,12 +1,11 @@
 #!/bin/bash
-set -x
 
 echo "$@"
 
 REPO="jasonk/dotfiles"
 BRANCH="master"
 
-CFGURL="https://raw.githubusercontent.com/$REPO/$BRANCH/cfg"
+CFGURL="https://raw.githubusercontent.com/$REPO/$BRANCH/master/cfg"
 #CFGURL="file://$HOME/cfg" # For Dev
 
 if ! command -v brew 2>/dev/null 1>/dev/null; then
