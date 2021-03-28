@@ -70,3 +70,8 @@
 /.vscode/argv.json
 /.vscode/extensions
 /.zsh_sessions
+/.cookiecutter_replay
+/.platformio
+/.pylint.d
+/.newtek
+/.config/Autodesk
