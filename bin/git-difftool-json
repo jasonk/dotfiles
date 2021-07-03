@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# diff is called by git with 7 parameters:
+# path old-file old-hex old-mode new-file new-hex new-mode
+
+set -euo pipefail
+
+diff-json "$2" "$5"
+exit 0

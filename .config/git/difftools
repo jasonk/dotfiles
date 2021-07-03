@@ -1,0 +1,4 @@
+[difftool "json"]
+  cmd = diff-json --sort-arrays -u \"$LOCAL\" \"$REMOTE\"
+[difftool "json-preserve-arrays"]
+  cmd = diff-json -u \"$LOCAL\" \"$REMOTE\"
