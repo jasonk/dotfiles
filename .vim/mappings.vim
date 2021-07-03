@@ -12,7 +12,6 @@ nnoremap gy :0,$ y<cr>
 nnoremap vy ggVG
 
 " Make Y behave like other capital commands.
-" Hat-tip http://vimbits.com/bits/11
 nnoremap Y y$
 
 " Create newlines without entering insert mode
@@ -20,7 +19,6 @@ nnoremap go o<Esc>k
 nnoremap gO O<Esc>j
 
 " remap U to <C-r> for easier redo
-" from http://vimbits.com/bits/356
 nnoremap U <C-r>
 
 " ---------------
@@ -139,7 +137,7 @@ imap  <silent> <s-tab>  <Esc>:if &modifiable && !&readonly &&
     \ &modified <CR> :write<CR> :endif<CR>:bnext<CR>
 
 " Disable the ever-annoying Ex mode shortcut key. Type visual my ass. Instead,
-" make Q repeat the last macro instead. *hat tip* http://vimbits.com/bits/263
+" make Q repeat the last macro instead.
 nnoremap Q @@
 
 " This prevents vim from moving comments to the left edge, leaving them
@@ -177,7 +175,6 @@ inoremap <F1> <nop>
 nnoremap <F1> <nop>
 vnoremap <F1> <nop>
 
-nnoremap <F11> :ALEToggleBuffer<CR>
 nnoremap <F12> :call g:ToggleSimplification()<CR>
 
 "map   <silent> <F2>    :write<CR>
@@ -203,7 +200,3 @@ vmap <s-tab> <gv
 " make tab in normal mode change indent
 nmap <tab> I<tab><esc>
 nmap <s-tab> ^i<bs><esc>
-
-" Let C-k and C-j navigate the ALE fixlist
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
