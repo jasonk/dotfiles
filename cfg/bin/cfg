@@ -10,66 +10,37 @@ warn() { echo "$@" 1>&2; }
 die() { warn "$@"; exit 1; }
 
 export GIT_DIR="$HOME/.cfg"
+export CFG_DIR="$HOME/cfg"
+export BIN_DIR="$HOME/bin"
 export GIT_WORK_TREE="$HOME"
 
-setup() {
-  set -x
-  ignore
-  if [ "$#" -gt 0 ]; then
-    local I
-    for I in "$@"; do "$HOME/cfg/setup-scripts/$I"; done
-  else
-    for I in "$HOME"/cfg/setup-scripts/*; do
-      if [ -x "$I" ]; then "$I"; fi
-    done
-  fi
-}
-
 usage() {
+  exec 1>&2
 cat <<'END'
 Usage: cfg <command> [args]
 
-This tools is really just a thin wrapper around 'git'.  It provides
-some configuration and this one command:
+This tool is really just a thin wrapper around 'git'.  It provides
+some configuration and some additional commands.  Any commands not
+listed here will be passed directly to 'git', so you manage your
+dotfiles in the repo with 'cfg add', 'cfg commit', 'cfg push', 'cfg
+pull', etc.
 
-  cfg setup           Ensure everything is setup correctly
-  cfg ignore [file..] Add the files to an ignore list
-
-Any other commands will be passed directly to 'git', so you manage
-your dotfiles in the repo with 'cfg add', 'cfg commit', 'cfg push',
-'cfg pull', etc.
 END
+  grep -h '^#$#' "$CFG_DIR/commands"/* \
+    | sed 's/^#$# /cfg /' \
+    | sed 's/ -- /\t/' \
+    | column -t -s$'\t'
+  exit 1
 }
 
-ignore() {
-  local file
-  for file in "$@"; do
-    echo "$file" >> "$HOME/cfg/ignores/cli-added"
-  done
-  (
-    # These patterns are the basis of all the ignore rules.
-    # They must be first.
-    echo '/*'    # By default ignore everything
-    echo '!/.*'  # then unignore all the top-level dotfiles
-    echo '/.cfg' # Except we want to keep ignoring the bare .cfg repo
-    echo '!/bin' # also unignore our bin directory
-    echo '!/cfg' # and our cfg directory
-    if [ -f "$HOME/cfg/ignores" ]; then
-      cat "$HOME/cfg/ignores"
-    elif [ -d "$HOME/cfg/ignores" ]; then
-      cat "$HOME"/cfg/ignores/*
-    fi
-  ) > "$HOME/.cfg/info/exclude"
-}
+if ! (( $# )); then usage; fi
 
-CMD="${1:-}" ; shift
-if [ -x "$HOME/cfg/bin/cfg-$CMD" ]; then
-  exec "$HOME/cfg/bin/cfg-$CMD" "$@";
+CMD="$1" ; shift
+if [ -f "$CFG_DIR/commands/$CMD.sh" ]; then
+  source "$CFG_DIR/commands/$CMD.sh";
 else
-  case "${CMD}" in
-    ""|help) usage ;;
-    setup) setup "$@" ;;
-    ignore) ignore "$@" ;;
+  case "$CMD" in
+    ""|help|--help|-h) usage ;;
     *) git "$CMD" "$@" ;;
   esac
 fi

@@ -1,11 +1,11 @@
 #!/bin/bash
 set -eu
 
-mkdir -p "$HOME/bin"
-cd "$HOME/bin"
+mkdir -p "$BIN_DIR"
+cd "$BIN_DIR"
 # Find the available utilities at
 # https://github.com/gnachman/iterm2-website/tree/master/source/utilities
-UTILS=($( sed -n 's,^/bin/,,p' "$HOME/cfg/ignores/iterm2-setup" ))
+UTILS=($( sed -n 's,^/bin/,,p' "$CFG_DIR/ignores/iterm2-setup" ))
 for I in "${UTILS[@]}"; do
   curl -LO "https://www.iterm2.com/utilities/$I"
   chmod +x "$I"

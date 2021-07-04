@@ -1,9 +1,12 @@
-# These shouldn't be committed because they are intended to be local
-# to each machine.
+# These are various temporary file naming schemes.
 #
 # IMPORTANT: If you edit this file directly you have to run `cfg
 # ignore` to update the "real" gitignore file that git actually uses!
 #
-/.gitconfig
-/.goto
-/.env
+*.bak
+*~
+*.OLD
+.viminf?.tmp
+.viminfo
+OLD
+tmp

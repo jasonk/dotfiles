@@ -2,6 +2,10 @@
 # possible you might want to commit these, but you should be sure you
 # know what you are doing if you do (and if your dotfile repo is
 # public, you definitely should not)
+#
+# IMPORTANT: If you edit this file directly you have to run `cfg
+# ignore` to update the "real" gitignore file that git actually uses!
+#
 /.*_history
 /.lesshst
 /.dbshell

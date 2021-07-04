@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # See https://github.com/VSCodeVim/Vim
-defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+if is_mac; then
+  defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
+fi
 # For VS Code Insider
 # defaults write com.microsoft.VSCodeInsiders ApplePressAndHoldEnabled -bool false
 # If necessary, reset global default
