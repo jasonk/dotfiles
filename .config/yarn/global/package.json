@@ -4,6 +4,7 @@
     "@feathersjs/cli": "^4.5.0",
     "@microsoft/rush": "^5.33.2",
     "create-next-app": "^10.0.9",
+    "clinic": "^8.0.1",
     "depcheck": "^0.9.2",
     "dmd-readable": "^1.1.1",
     "docusaurus-init": "^1.9.0",
