@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+const fs = require( 'fs-extra' );
+
+process.argv.slice( 2 ).forEach( file => {
+  const chunks = fs.readFileSync( file, 'utf8' ).trim()
+    .split( /^(diff .*?)$/um );
+  if ( ! chunks[ 0 ].startsWith( 'diff --git' ) ) chunks.shift();
+  while ( chunks.length ) {
+    const head = chunks.shift();
+    const body = chunks.shift();
+    const name = head.split( /\s+/u )[ 3 ].replace( /^b\//u, '' );
+    if ( fs.existsSync( name ) ) {
+      console.warn( name, 'already exists, skipping' );
+      return;
+    }
+    fs.outputFileSync( `${name}.patch`, `${head}\n${body}\n`, 'utf8' );
+  }
+} );

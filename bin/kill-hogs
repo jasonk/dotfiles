@@ -1,2 +1,7 @@
 #!/bin/bash
-ps -xo pcpu,pid | awk '$1 > 100 {print $2}' | xargs kill
+
+if [ "$1" = "-n" ]; then
+  ps -xo pcpu,pid,command | awk '$1 > 100'
+else
+  ps -xo pcpu,pid | awk '$1 > 100 {print $2}' | xargs kill
+fi
