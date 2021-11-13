@@ -34,7 +34,7 @@ umask 022
 # Reload autoloaded functions
 freload() for i; do unfunction $i; autoload -U $i; done
 
-function source_all() { for config ($ZSH_DIR/$1/*.zsh) source $config }
+source_all() { for config ($ZSH_DIR/$1/*.zsh) source $config }
 
 source_all libs
 source_all configs

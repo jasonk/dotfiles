@@ -44,3 +44,5 @@ path=(
 )
 
 export ZSH_CACHE="$HOME/.cache/zsh"
+
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES

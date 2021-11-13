@@ -4,15 +4,29 @@
 #$# setup [name] -- Run specific setup scripts.
 #$# setup --list -- List available setup scripts.
 
+list-setups() {
+  for I in "$CFG_DIR/setup-scripts"/*; do
+    if [ -x "$I" ]; then basename "$I"; fi
+  done
+}
+run-setup() {
+  local SETUP="$CFG_DIR/setup-scripts/$1"
+  if [ -x "$SETUP" ]; then
+    "$SETUP";
+  else
+    warn "Unknown setup command '$1'"
+  fi
+}
+
 cfg ignore
-if [ "$1" = "--list" ]; then
-  for I in "$CFG_DIR/setup-scripts"/*; do
-    basename "$I"
+if (( $# )); then
+  while (( $# )); do
+    case "$1" in
+      --list) list-setups ; shift 1 ;;
+      -*) die "Unknown option '$1'" ;;
+      *) run-setup "$1" ; shift 1 ;;
+    esac
   done
-elif [ "$#" -gt 0 ]; then
-  for I in "$@"; do "$CFG_DIR/setup-scripts/$I"; done
 else
-  for I in "$CFG_DIR/setup-scripts"/*; do
-    if [ -x "$I" ]; then "$I"; fi
-  done
+  for I in $(list-setups); do run-setup "$I"; done
 fi

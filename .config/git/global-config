@@ -60,7 +60,8 @@
   mailmap = true
 
 [credential]
-  helper = osxkeychain
+  # helper = osxkeychain
+  helper = token
 
 [hub]
   protocol = https
