@@ -1,0 +1,30 @@
+#!/bin/bash
+set -euo pipefail
+
+DIR="$HOME/Library/Application Support/AddressBook"
+list-addressbooks() {
+  cd "$DIR"
+  find . -name \*.abcddb;
+}
+extract-book() {
+  if [ ! -f "$1" ]; then cd "$DIR"; fi
+sqlite3 "$1" <<'END'
+.mode tabs
+select
+  (ZABCDRECORD.ZFIRSTNAME || ' ' || ZABCDRECORD.ZLASTNAME),
+  ZABCDEMAILADDRESS.ZADDRESS
+from ZABCDRECORD
+  inner join ZABCDEMAILADDRESS on ZABCDRECORD.Z_PK = ZABCDEMAILADDRESS.ZOWNER
+END
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --list) list-addressbooks ; shift 1 ;;
+  esac
+done
+
+cd "$DIR"
+for I in $(find . -name \*.abcddb); do
+  extract-book "$I"
+done

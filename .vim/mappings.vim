@@ -162,7 +162,7 @@ nnoremap ' `
 nnoremap ` '
 
 " space bar folding - hit space to fold/unfold (if a fold exists there)
-nnoremap <silent> <space> :exe 'silent! normal! za'.(foldlevel('.')?'':'l')<cr>
+"nnoremap <silent> <space> :exe 'silent! normal! za'.(foldlevel('.')?'':'l')<cr>
 
 " http://www.vim.org/tips/tip.php?tip_id=1
 " let * and # search within the visual selection

@@ -49,5 +49,5 @@ autocmd BufRead COMMIT_EDITMSG setlocal spell!
 " executable
 if has("unix")
   autocmd BufWritePost * if getline(1) =~ "^#!.*/bin/"
-    \ | silent execute "!chmod a+x <afile>" | endif
+    \ | silent execute "!chmod +x <afile>" | endif
 endif

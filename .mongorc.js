@@ -1,10 +1,9 @@
-// change the prompt
-host = db.serverStatus().host;
-prompt = function() { return db + '@' + host + '$'; };
-
 function pretty() { DBQuery.prototype._prettyShell = true; }
 function ugly() { DBQuery.prototype._prettyShell = false; }
 
+// change the prompt
+host = db.serverStatus().host;
+prompt = function() { return db + '@' + host + '$'; };
 // DBQuery is the mongo shell's cursor object, so you can chain these
 // methods of off any cursor.
 Object.assign( DBQuery.prototype, {

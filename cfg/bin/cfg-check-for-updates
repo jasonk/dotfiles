@@ -4,6 +4,7 @@
 # MIT Licensed
 # https://github.com/jasonk/dotfiles
 ####################
+#$# check-for-updates -- Check if there are updates in the upstream repo
 
 git fetch origin
 count="$(git rev-list HEAD..origin/master --count)"

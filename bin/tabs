@@ -1,0 +1,242 @@
+#!/usr/bin/env osascript -l JavaScript
+/**
+ * CLI tool to manage Google Chrome tabs.
+ * 2020 Jason Kohles https://jasonkohles.com/
+ */
+
+ObjC.import( 'stdlib' );
+ObjC.import( 'Foundation' );
+
+const chrome = Application( 'Google Chrome' );
+chrome.includeStandardAdditions = true;
+
+let debugging = false;
+
+function debug( msg ) { if ( debugging ) print( msg ); }
+
+function usage() {
+  print(
+    'Usage: tabs [options] <command> [selectors..]',
+    '',
+    'Commands:',
+    '  list     List all tabs',
+    '  dedup    Close duplicate tabs',
+    '  close    Close a specific tab',
+    '  raise    Raise a specific tab',
+    '',
+    'Selectors:',
+    '  -i, --id <id..>            Select tabs by id (default)',
+    '  -t, --title <string..>     Select tabs by title',
+    '  -u, --url <string..>       Select tabs by URL',
+    '',
+    'Options:',
+    '  -a, --alfred         Turn on Alfred mode',
+    '  -f, --force          Force closing tabs, even if it\'s most of them',
+  );
+  $.exit( 1 );
+}
+
+function tabMatches( tab, opts ) {
+  const titles = opts.titles.length && opts.titles;
+  const urls = opts.urls.length && opts.urls;
+  const ids = opts.ids.length && opts.ids;
+  const any = opts.any.length && opts.any;
+
+  if ( ! ( titles || urls || ids || any ) ) return true;
+  if ( any ) {
+    for ( const a of any ) {
+      if ( tab.title.includes( a ) || tab.url.includes( a ) || tab.id === a ) {
+        return true;
+      }
+    }
+  }
+  if ( titles ) {
+    for ( const t of titles ) {
+      if ( tab.title.includes( t ) ) return true;
+    }
+  }
+  if ( urls ) {
+    for ( const u of urls ) {
+      if ( tab.url.includes( u ) ) return true;
+    }
+  }
+  if ( ids ) {
+    if ( ids.includes( tab.id ) ) return true;
+  }
+  return false;
+}
+
+function filterTabs( tabs, opts ) {
+  return tabs.filter( tab => tabMatches( tab, opts ) );
+}
+
+function iterateTabs( callback, opts ) {
+  let count = 0;
+  for ( const win of chrome.windows() ) {
+    for ( const tab of win.tabs() ) {
+      const id = String( tab.id() );
+      const url = tab.url();
+      const title = tab.title();
+      debug( `${id}: ${url} (${title})` );
+      const info = { id, url, title, tab };
+      if ( tabMatches( info, opts ) ) {
+        callback( info );
+        count++;
+      }
+      if ( opts.limit && count === opts.limit ) return;
+    }
+  }
+}
+
+function collectTabs( opts ) {
+  const tabs = [];
+  let total = 0;
+  for ( const win of chrome.windows() ) {
+    for ( const tab of win.tabs() ) {
+      total++;
+      const id = tab.id();
+      const url = tab.url();
+      const title = tab.title();
+      const info = { id, url, title, tab };
+      if ( tabMatches( info, opts ) ) tabs.push( info );
+      if ( opts.limit && tabs.length === opts.limit ) return tabs;
+    }
+  }
+  tabs.total = total;
+  tabs.percent = Math.round( ( tabs.length / total ) * 100 );
+  return tabs;
+}
+
+function getTabs( opts ) {
+  const tabs = collectTabs( opts );
+  if ( opts.sort ) {
+    if ( opts.sort === true ) opts.sort = 'title';
+    const s = opts.sort;
+    tabs.sort( ( a, b ) => a[s].localeCompare( b[s] ) );
+  }
+  if ( opts.group ) {
+    if ( opts.group === true ) opts.group = 'url';
+    const g = opts.group;
+    const groups = {};
+    getTabs( opts ).forEach( tab => {
+      ( groups[ tab[g] ] || ( groups[ tab[g] ] = [] ) ).push( tab );
+    } );
+    return groups;
+  }
+  return tabs;
+}
+
+const commands = {
+  list( opts ) {
+    const tabs = getTabs( opts );
+    if ( opts.alfred ) return { items : tabs };
+    return tabs;
+  },
+  count( opts ) {
+    const tabs = getTabs( opts );
+    return tabs.length;
+  },
+  dups( opts={} ) {
+    const seen = new Set();
+    iterateTabs( tab => {
+      if ( seen.has( tab.url ) ) {
+        print( `${tab.id}: ${tab.url} (${tab.title})` );
+      } else {
+        seen.add( tab.url );
+      }
+    }, opts );
+  },
+  dedup( opts={} ) {
+    const seen = new Set();
+    iterateTabs( tab => {
+      if ( seen.has( tab.url ) ) {
+        tab.tab.close();
+      } else {
+        seen.add( tab.url );
+      }
+    }, opts );
+  },
+  close( opts={} ) {
+    const tabs = getTabs( opts );
+    if ( tabs.percent > 50 ) {
+      print( 'This is more than half of your tabs!' );
+      if ( ! opts.force ) {
+        print( 'Specify --force to do it anyway' );
+        return;
+      }
+    }
+    tabs.forEach( ( { tab } ) => tab.close() );
+    return tabs;
+  },
+  raise( opts ) {
+    const id = parseInt( opts.any[0] || opts.ids[0] );
+    if ( ! id ) return usage();
+    for ( const win of chrome.windows() ) {
+      const idx = win.tabs().findIndex( tab => tab.id() === id );
+      if ( idx >= 0 ) {
+        win.visible = true;
+        win.activeTabIndex = idx + 1;
+        win.visible = true;
+        win.index = 1;
+        chrome.activate();
+      }
+    }
+  },
+  help() { usage(); },
+};
+commands.dedupe = commands.dedup;
+
+function run( argv ) {
+  if ( ! argv.length ) usage();
+
+  let cmd = 'help';
+  const opts = { any : [], ids : [], urls : [], titles : [] };
+  let what = opts.any;
+
+  const args = [ ...argv ];
+  while ( args.length ) {
+    const arg = args.shift();
+    if ( /^-[a-z]+$/u.test( arg ) ) {
+      args.unshift( ...arg.slice( 1 ).split( '' ).map( x => '-' + x ) );
+    } else if ( commands[ arg ] ) {
+      cmd = arg;
+    } else if ( arg === '--id' || arg === '-i' ) {
+      what = opts.ids;
+    } else if ( arg === '--title' || arg === '-t' ) {
+      what = opts.titles;
+    } else if ( arg === '--url' || arg === '-u' ) {
+      what = opts.urls;
+    } else if ( arg === '--any' || arg === '-a' ) {
+      what = opts.any;
+    } else if ( arg === '--alfred' || arg === '-A' ) {
+      opts.alfred = true;
+    } else if ( arg === '--force' || arg === '-f' ) {
+      opts.force = true;
+    } else if ( arg === '--debug' || arg === '-d' ) {
+      debugging = true;
+    } else if ( arg.startsWith( '--' ) ) {
+      const [ key, val=true ] = arg.slice( 2 ).split( '=' );
+      opts[ key.replace( /\W+/gu, '_' ) ] = val;
+    } else {
+      what.push( arg );
+    }
+  }
+
+  try {
+    const res = commands[ cmd ]( opts );
+    print( JSON.stringify( res, null, 2 ) )
+    $.exit( 0 );
+  } catch ( err ) {
+    print( err );
+    $.exit( 1 );
+  }
+}
+
+function print( ...messages ) {
+  $.NSFileHandle.fileHandleWithStandardOutput.writeData(
+    $.NSString.alloc.initWithString( messages.join( '\n' ) + '\n' )
+      .dataUsingEncoding( $.NSUTF8StringEncoding )
+  );
+}
+
+// vim:ft=javascript

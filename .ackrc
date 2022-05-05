@@ -40,8 +40,10 @@
 --ignore-dir=is:mochawesome-report
 --ignore-dir=is:ARCHIVED
 
---ignore-file=match:/[.]log$/
+--ignore-file=match:/\.log$/
+--ignore-file=match:/\.log\.json$/
 
+--ignore-dir=match:/\.0x$/
 #--ignore-dir=match:/[.]cached$/
 
 #--pager=less -RFX

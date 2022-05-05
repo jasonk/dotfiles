@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-URL="$(hub ci-status -v | awk '{print $NF}' | head -1)"
-open "${URL%display/redirect}consoleText"

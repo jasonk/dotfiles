@@ -1,1 +1,10 @@
+/commands
 /extensions/node_modules
+/extensions/coc-groovy-data/
+/extensions/db.json
+/list-commands-history.json
+/list-diagnostics-history.json
+/list-extensions-history.json
+/list-outline-history.json
+/memos.json
+/ultisnips

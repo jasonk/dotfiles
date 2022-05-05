@@ -2,12 +2,12 @@
 
 let g:ale_linters = {
   \ 'javascript': [ 'eslint' ],
-  \ 'typescript': [ 'eslint', 'tsserver' ]
+  \ 'typescript': [ 'eslint' ]
   \ }
 
 let g:ale_fixers = {
   \ 'javascript': [ 'eslint' ],
-  \ 'typescript': [ 'eslint', 'tsserver' ]
+  \ 'typescript': [ 'eslint' ]
   \ }
 
 let g:ale_linters_ignore = {
@@ -18,19 +18,18 @@ let g:ale_completion_enabled = 1
 
 let g:ale_completion_autoimport = 1
 
-nnoremap <silent> <leader>af :ALEFix<CR>
-nnoremap <silent> <leader>al :ALELint<CR>
-nnoremap <silent> gd         :ALEGoToDefinition<CR>
+nmap <silent> <leader>af  :ALEFix<CR>
+nmap <silent> <leader>al  :ALELint<CR>
+nmap <silent> <leader>aj  :ALENext<cr>
+nmap <silent> <leader>ak  :ALEPrevious<cr>
+
+nmap <silent> <leader>agd :ALEGoToDefinition<CR>
 
 nnoremap <F11> :ALEToggleBuffer<CR>
 
 let g:ale_sign_info    = 'I>'
 let g:ale_sign_warning = 'W>'
 let g:ale_sign_error   = 'E>'
-
-" Let C-k and C-j navigate the ALE fixlist
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 let g:ale_set_highlights = 1
 let g:ale_fixers         = {
