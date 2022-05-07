@@ -15,16 +15,19 @@ ps = log --pretty=oneline @{u}..
 w = whatchanged -p
 # changes since we last did a push
 wo = whatchanged -p origin..
+wu = whatchanged -p origin..
 pushtags = push origin --tags
 pushnotes = push origin refs/notes/*
 
 fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
 squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
 ri = rebase --interactive --autosquash
-rbu = !git fetch upstream && git rebase upstream/master --autostash
-rbo = !git fetch origin && git rebase origin/master --autostash
-mu = !git fetch upstream && git merge upstream/master --autostash --no-edit
-mo = !git fetch origin && git merge origin/master --autostash --no-edit
+rbu = !git fetch upstream && git rebase upstream/$(git mainu) --autostash --no-edit
+rsu = !git reset upstream/$(git mainu)
+rbo = !git fetch origin && git rebase origin/$(git maino) --autostash --no-edit
+rso = !git reset origin/$(git maino)
+mu = !git fetch upstream && git merge upstream/$(git mainu) --autostash --no-edit
+mo = !git fetch origin && git merge origin/$(git maino) --autostash --no-edit
 wdiff = diff --color-words
 ignore = update-index --assume-unchanged
 unignore = update-index --no-assume-unchanged
@@ -37,6 +40,19 @@ add-unmerged = !$EDITOR $(git lsu | cut -f2 | sort -u)
 au = add-unmerged
 prune-all = !git remote | xargs -n 1 git remote prune
 
+# upstream-name = find the name of the upstream branch
+# This only works because my standard is to use `origin` for my own
+# repos, and `uptream` for the upstream repo.  In the case where it's
+# one of my projects and there is no upstream then I only have `origin`.
+# In the case where there are both, it ends up with upstream just because
+# it gets sorted last.
+upstream-name = !git remote | grep -Eo '^(origin|upstream) ' | sort | tail -1
+
+# main = Show the name of the HEAD branch for the repo (usually
+# `main` or `master`)
+maino = !git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
+mainu = !git symbolic-ref refs/remotes/upstream/HEAD | cut -d'/' -f4
+
 # lc = See what commits we got in the last fetch
 lc = log ORIG_HEAD.. --stat --no-merges
 
@@ -46,4 +62,10 @@ llog = log --date=local
 # Run gitk for conflict resolution
 gitkconflict = !gitk --left-right HEAD..MERGE_HEAD
 
-history = log --follow -p --
+history = log --text --follow -p --
+ages = !git for-each-ref --sort=-committerdate refs/heads --color=always --format='%(HEAD)%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' | column -ts'|'
+jenkins-pr-url = !gh pr checks | xargs -n1 | grep -E 'https?://jenkins' | sed 's%/display/redirect%%'
+jenkins-pr-log-url = !echo "$(git jenkins-pr-url)/consoleFull"
+jenkins-pr-log-text-url = !echo "$(git jenkins-pr-url)/consoleText"
+jenkins-pr-log = !open "$(git jenkins-pr-log-url)"
+jenkins-pr-log-only = !open "$(git jenkins-pr-log-text-url)"

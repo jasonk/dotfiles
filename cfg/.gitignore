@@ -1,2 +1,4 @@
 /debug.disabled
 /debug.options
+/cfg-env.sh
+/*.tmp

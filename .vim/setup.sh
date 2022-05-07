@@ -55,7 +55,7 @@ process() {
           ;;
         PostInstall)
           echo "Running postinstall for $NAME in $REPODIR"
-          ( cd "$REPODIR" && $ARG )
+          ( cd "$REPODIR" && bash -c "$ARG" )
           ;;
         *) echo "Unknown command $CMD" ;;
       esac

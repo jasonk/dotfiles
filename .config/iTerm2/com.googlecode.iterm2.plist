@@ -591,7 +591,9 @@
 			<key>Screen</key>
 			<integer>-2</integer>
 			<key>Scrollback Lines</key>
-			<integer>0</integer>
+			<integer>10000</integer>
+			<key>Scrollback With Status Bar</key>
+			<false/>
 			<key>Scrollback in Alternate Screen</key>
 			<false/>
 			<key>Selected Text Color</key>
@@ -631,7 +633,7 @@
 			<key>Transparency</key>
 			<real>0.0</real>
 			<key>Unlimited Scrollback</key>
-			<true/>
+			<false/>
 			<key>Use Bold Font</key>
 			<true/>
 			<key>Use Bright Bold</key>
@@ -649,7 +651,7 @@
 			<key>Window Type</key>
 			<integer>0</integer>
 			<key>Working Directory</key>
-			<string>/Users/jasonkohles</string>
+			<string>$HOME</string>
 		</dict>
 		<dict>
 			<key>ASCII Anti Aliased</key>
@@ -1288,7 +1290,7 @@
 			<key>Window Type</key>
 			<integer>2</integer>
 			<key>Working Directory</key>
-			<string>/Users/jasonkohles</string>
+			<string>$HOME</string>
 		</dict>
 	</array>
 	<key>OpenTmuxWindowsIn</key>

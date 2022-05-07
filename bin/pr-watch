@@ -1,0 +1,23 @@
+#!/bin/bash
+# pr-watch
+# 2022 - Jason Kohles - https://www.jasonkohles.com/
+#
+# Finds any PRs with actively running checks for a GitHub repo and
+# then runs `gh pr checks --watch` for all of them at the same time.
+#
+# Requires:
+# gh   - https://cli.github.com
+# tmux - https://github.com/tmux/tmux#readme
+
+declare -a CMDS=()
+
+while read -r PR; do
+  if (( ${#CMDS[@]} )); then
+    CMDS+=( split-window )
+  else
+    CMDS+=( new-session )
+  fi
+  CMDS+=( "gh pr checks --watch $PR" ';' )
+done < <(gh pr list | awk -F'\t' '{print $1 }')
+
+exec tmux "${CMDS[@]}"

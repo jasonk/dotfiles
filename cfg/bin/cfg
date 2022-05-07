@@ -14,6 +14,9 @@ export CFG_DIR="$HOME/cfg"
 export BIN_DIR="$HOME/bin"
 export GIT_WORK_TREE="$HOME"
 
+export PATH="$CFG_DIR/bin:$PATH"
+
+if [ -f "$CFG_DIR/cfg-env.sh" ]; then . "$CFG_DIR/cfg-env.sh"; fi
 usage() {
   exec 1>&2
 cat <<'END'
@@ -26,10 +29,9 @@ dotfiles in the repo with 'cfg add', 'cfg commit', 'cfg push', 'cfg
 pull', etc.
 
 END
-  grep -h '^#$#' "$CFG_DIR/commands"/* \
-    | sed 's/^#$# /cfg /' \
-    | sed 's/ -- /\t/' \
-    | column -t -s$'\t'
+  sed -n 's/^#$# /cfg /p' "$CFG_DIR"/{bin,commands}/* |
+    awk '{gsub(" -- ","\t", $0); print }' |
+    column -t -s$'\t'
   exit 1
 }
 
@@ -38,6 +40,8 @@ if ! (( $# )); then usage; fi
 CMD="$1" ; shift
 if [ -f "$CFG_DIR/commands/$CMD.sh" ]; then
   source "$CFG_DIR/commands/$CMD.sh";
+elif command -v "cfg-$CMD" &>/dev/null; then
+  exec "cfg-$CMD" "$@";
 else
   case "$CMD" in
     ""|help|--help|-h) usage ;;

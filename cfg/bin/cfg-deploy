@@ -4,8 +4,8 @@
 # MIT Licensed
 # https://github.com/jasonk/dotfiles
 ####################
+#$# deploy <target-host..> -- Deploy your dotfiles to a remote system
 set -euo pipefail
-set -x
 
 warn() { echo "$@" 1>&2; }
 die() { warn "$@"; exit 1; }
@@ -60,6 +60,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+if ! (( ${#TARGETS[@]} )); then usage; fi
 
 for TARGET in "${TARGETS[@]}"; do
 

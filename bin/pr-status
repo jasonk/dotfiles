@@ -1,0 +1,17 @@
+#!/bin/bash
+# pr-watch
+# 2022 - Jason Kohles - https://www.jasonkohles.com/
+#
+# Gets a list of all the open PRs for a GitHub repo and shows the
+# title and checks status for each one.
+#
+# Requires:
+# gh   - https://cli.github.com
+
+while IFS= read -r LINE; do
+  NUMBER="$(jq -r .number <<<"$LINE")"
+  TITLE="$(jq -r .title <<<"$LINE")"
+  printf '\e[1;36m%s\e[21;39m\n' "$TITLE"
+  gh pr checks "$NUMBER"
+  printf '\n\n'
+done < <(gh pr list --json number,title | jq -c '.[]')

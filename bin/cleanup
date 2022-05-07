@@ -1,0 +1,58 @@
+#!/bin/bash
+set -euo pipefail
+#shopt -s nullglob
+
+DRY_RUN=false
+while (( $# )); do
+  case "$1" in
+    -n|--dry-run) DRY_RUN=true ; shift 1 ;;
+    *) echo "Unknown option '$1'" 1>&2; exit 1;;
+  esac
+done
+
+havecmd() { command -v "$1" &>/dev/null; }
+is-dry-run() { $DRY_RUN; }
+# Remove individual directories or files
+nuke() {
+  local X
+  for X; do
+    if ! [ -e "$X" ]; then continue; fi
+    if $DRY_RUN; then
+      echo "(DRY RUN) NUKING: $X"
+    else
+      echo "NUKING: $X"
+      rm -rf "$X";
+    fi
+  done
+}
+empty-dirs() {
+  local DIR
+  for DIR; do
+    if [ -d "$DIR" ]; then nuke "$DIR"/*; fi
+  done
+}
+only-keep-newest-version() {
+  local GLOB NUKE
+  for GLOB in "$@"; do
+    while IFS= read -r NUKE; do
+      if [ -n "$NUKE" ]; then nuke "$NUKE"; fi
+    done < <(ls -1d $GLOB | sort -Vr | tail -n +2)
+  done
+}
+
+if [ -d ~/.pm2/logs ]; then rm -f ~/.pm2/logs/*.log; fi
+
+if havecmd brew; then brew cleanup; fi
+if havecmd yarn; then yarn cache clean; fi
+if havecmd cypress; then cypress cache clear; fi
+
+only-keep-newest-version \
+  "$HOME/Library/Caches/typescript/*" \
+  "$HOME/Library/Caches/node-gyp/*" \
+  "$HOME/Library/Caches/ms-playwright/chromium-*" \
+  "$HOME/Library/Caches/ms-playwright/ffmpeg-*" \
+  "$HOME/Library/Caches/ms-playwright/firefox-*" \
+  "$HOME/Library/Caches/ms-playwright/webkit-*" \
+
+#if havecmd docker; then
+#fi
