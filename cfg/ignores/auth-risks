@@ -36,3 +36,6 @@
 /.vault
 /.vault-token
 /.vault_tokens
+/.kube
+/.config/mosquitto_pub
+/.config/mosquitto_sub

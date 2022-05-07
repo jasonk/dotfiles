@@ -5,6 +5,7 @@
     "@microsoft/rush": "^5.33.2",
     "clinic": "^8.0.1",
     "create-next-app": "^10.0.9",
+    "create-redwood-app": "^0.43.0",
     "create-vite": "^2.6.6",
     "depcheck": "^0.9.2",
     "dmd-readable": "^1.1.1",

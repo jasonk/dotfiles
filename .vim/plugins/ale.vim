@@ -1,4 +1,4 @@
-" Disabled 'dense-analysis/ale'
+" Disable 'dense-analysis/ale'
 
 let g:ale_linters = {
   \ 'javascript': [ 'eslint' ],
@@ -28,9 +28,14 @@ let g:ale_sign_info    = 'I>'
 let g:ale_sign_warning = 'W>'
 let g:ale_sign_error   = 'E>'
 
-" Let C-k and C-j navigate the ALE fixlist
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <silent> <leader>j :ALENext<CR>
+nmap <silent> <leader>k :ALEPrevious<CR>
+nmap <silent> <leader>ej :ALENext -error<CR>
+nmap <silent> <leader>ek :ALEPrevious -error<CR>
+nmap <silent> <leader>wj :ALENext -warning<CR>
+nmap <silent> <leader>wk :ALEPrevious -warning<CR>
+nmap <silent> <leader>ij :ALENext -info<CR>
+nmap <silent> <leader>ik :ALEPrevious -info<CR>
 
 let g:ale_set_highlights = 1
 let g:ale_fixers         = {

@@ -26,19 +26,20 @@
 #--type-add=perl:ext:pl,pm,pod,t,psgi
 #--type-add=perl:firstlinematch:/^#!.*\bperl/
 
---ignore-dir=is:bower_components
---ignore-dir=is:.next
---ignore-dir=is:.direnv
 --ignore-dir=is:.cache
---ignore-dir=is:.meteor
---ignore-dir=is:.storybook
+--ignore-dir=is:.direnv
 --ignore-dir=is:.docusaurus
+--ignore-dir=is:.meteor
+--ignore-dir=is:.next
+--ignore-dir=is:.storybook
 --ignore-dir=is:.styleguide
+--ignore-dir=is:ARCHIVED
+--ignore-dir=is:OLD
+--ignore-dir=is:bower_components
 --ignore-dir=is:build
 --ignore-dir=is:dist
---ignore-dir=is:OLD
 --ignore-dir=is:mochawesome-report
---ignore-dir=is:ARCHIVED
+--ignore-dir=is:venv
 
 --ignore-file=match:/[.]log$/
 
