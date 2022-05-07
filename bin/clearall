@@ -1,0 +1,2 @@
+#!/bin/bash
+printf '\e[2J\e[3J\e[H'
