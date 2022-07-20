@@ -4,10 +4,10 @@ set -x
 
 PREFIX="qpr-"
 DIR="$(cd "$(git rev-parse --show-toplevel)/.." && pwd)"
-UPSTREAM="upstream"
+UPSTREAM="$(git upstream-name)"
 ORIGIN="origin"
 COMMITS=()
-MAIN="master"
+MAIN="$(git main "$UPSTREAM")"
 STAGED=false
 
 usage() {
@@ -36,7 +36,7 @@ Options:
     The name of the main branch in the upstream repo.  This is the
     branch that PRs will be opened against.  (Default is 'master').
 
-Note that this requires the GitHub 'hub' CLI tool (and it must be
+Note that this requires the GitHub 'gh' CLI tool (and it must be
 configured) in order to open the pull-request.
 END
 }
@@ -80,6 +80,7 @@ MYDIR="$(pwd)"
   if command -v hub >/dev/null 2>/dev/null; then hub pull-request; fi
 )
 
+# remove the commits that were moved to the PR from the current worktree
 #if $DROP; then
 #  for COMMIT in "${COMMITS[@]}"; do
 #    git rebase --autostash --rebase-merges --onto "${COMMIT}^" "${COMMIT}"

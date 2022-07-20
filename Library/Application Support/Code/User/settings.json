@@ -63,5 +63,6 @@
     "editor.autoSurround": "never",
     "editor.autoClosingQuotes": "never",
     "html.autoClosingTags": false,
-    "editor.minimap.enabled": false
+    "editor.minimap.enabled": false,
+    "vsicons.dontShowNewVersionMessage": true
 }

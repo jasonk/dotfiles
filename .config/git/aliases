@@ -19,15 +19,40 @@ wu = whatchanged -p origin..
 pushtags = push origin --tags
 pushnotes = push origin refs/notes/*
 
-fixup = !sh -c 'git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"' -
-squash = !sh -c 'git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"' -
+# empty-tree-sha1 = show the sha1 hash of the empty tree
+empty-tree-sha1 = hash-object -t tree /dev/null
+# oneline = pass hashes as arguments or pipe them in and get logs for them
+oneline ="!_() { $(test $# -eq 0 && echo xargs -L1) git log --no-walk --decorate --oneline \"$@\"; }; _"
+
+fixup = !git commit -m \"fixup! $(git log -1 --format='\\''%s'\\'' $@)\"
+squash = !git commit -m \"squash! $(git log -1 --format='\\''%s'\\'' $@)\"
+
 ri = rebase --interactive --autosquash
-rbu = !git fetch upstream && git rebase upstream/$(git mainu) --autostash --no-edit
-rsu = !git reset upstream/$(git mainu)
-rbo = !git fetch origin && git rebase origin/$(git maino) --autostash --no-edit
-rso = !git reset origin/$(git maino)
-mu = !git fetch upstream && git merge upstream/$(git mainu) --autostash --no-edit
-mo = !git fetch origin && git merge origin/$(git maino) --autostash --no-edit
+
+rb = "!_() {\
+  REMOTE=${1-$(git upstream-name)} \
+  && git fetch $REMOTE \
+  && git rebase $REMOTE/$(git main $REMOTE) --autostash;\
+  }; _"
+rbu = rb upstream
+rbo = rb origin
+
+rs = "!_() {\
+  REMOTE=${1-$(git upstream-name)} \
+  && BRANCH=${2-$(git main $REMOTE)} \
+  && git reset $REMOTE/$BRANCH; \
+  }; _"
+rsu = rs upstream
+rso = rs origin
+
+m = "!_() {\
+  REMOTE=${1-$(git upstream-name)} \
+  && git fetch $REMOTE \
+  && git merge $REMOTE/$(git main $REMOTE) --autostash --no-edit;\
+  }; _"
+mu = m upstream
+mo = m origin
+
 wdiff = diff --color-words
 ignore = update-index --assume-unchanged
 unignore = update-index --no-assume-unchanged
@@ -42,19 +67,24 @@ prune-all = !git remote | xargs -n 1 git remote prune
 
 # upstream-name = find the name of the upstream branch
 # This only works because my standard is to use `origin` for my own
-# repos, and `uptream` for the upstream repo.  In the case where it's
+# repos, and `upstream` for the upstream repo.  In the case where it's
 # one of my projects and there is no upstream then I only have `origin`.
 # In the case where there are both, it ends up with upstream just because
 # it gets sorted last.
-upstream-name = !git remote | grep -Eo '^(origin|upstream) ' | sort | tail -1
+upstream-name = !git remote | grep -Eo '^(origin|upstream)$' | sort | tail -1
 
 # main = Show the name of the HEAD branch for the repo (usually
 # `main` or `master`)
-maino = !git symbolic-ref refs/remotes/origin/HEAD | cut -d'/' -f4
-mainu = !git symbolic-ref refs/remotes/upstream/HEAD | cut -d'/' -f4
+main = "!_() { \
+  REMOTE=${1-$(git upstream-name)} \
+  && git remote show $REMOTE | sed -n 's/^.*HEAD branch: //p'; \
+  }; _"
 
 # lc = See what commits we got in the last fetch
 lc = log ORIG_HEAD.. --stat --no-merges
+
+# undo = undo the last commit
+undo = reset --soft HEAD^
 
 # llog = Just like 'git log' but with localized timestamps
 llog = log --date=local
