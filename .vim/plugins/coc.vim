@@ -2,6 +2,18 @@
 " Plugin 'neoclide/coc.nvim'
 " PostInstall cd ~/.config/coc/extensions && npm install --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod
 
+let g:coc_global_extensions = [
+\ 'coc-pyright',
+\ 'coc-tsserver',
+\ 'coc-html',
+\ 'coc-yaml',
+\ 'coc-snippets',
+\ 'coc-eslint8',
+\ 'coc-json',
+\ ]
+
+let g:syntastic_python_python_exec = 'python3'
+
 hi Pmenu ctermbg=black ctermfg=white
 hi Ignore ctermbg=black ctermfg=grey
 hi CocListFgBlack ctermbg=black ctermfg=grey

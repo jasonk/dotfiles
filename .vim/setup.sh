@@ -9,7 +9,7 @@ mkdir -p "$PACKS"
 
 REPOS=()
 PLUGINS=()
-CMD_RE="^\" *(Plugin|PostInstall|Disabled|Branch) *'?([^']*)'?$"
+CMD_RE="^\" *(Plugin|PostInstall|Setup|Disabled|Branch) *'?([^']*)'?$"
 is_repo() {
   local value="$1"
   local i
@@ -56,6 +56,10 @@ process() {
         PostInstall)
           echo "Running postinstall for $NAME in $REPODIR"
           ( cd "$REPODIR" && bash -c "$ARG" )
+          ;;
+        Setup)
+          echo "Running setup for $NAME in $REPODIR"
+          ( cd "$REPODIR" && vim -u NONE -c "$ARG" -c q )
           ;;
         *) echo "Unknown command $CMD" ;;
       esac
