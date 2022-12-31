@@ -74,6 +74,5 @@
     "debug.terminal.clearBeforeReusing": true,
     "html.autoCreateQuotes": false,
     "vim.commandLineModeKeyBindingsNonRecursive": [
-    
     ]
 }
