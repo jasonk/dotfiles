@@ -1,204 +1,79 @@
 {
-    "editor.tabSize": 2,
-    "editor.renderWhitespace": "boundary",
-    "editor.autoClosingBrackets": "never",
-    "editor.autoClosingQuotes": "never",
-    "editor.autoSurround": "never",
-    "editor.minimap.enabled": true,
-    "editor.suggestSelection": "first",
-    "files.exclude": {
-        "**/.nyc_output": true,
-        "**/ARCHIVED/**": true,
-        "**/dist/**": true,
-        "**/hcsrc/**": true,
-        "**/node_modules": true,
-        "**/old-*/**": true,
-        "**/OLD-*/**": true,
-        "**/OLD/**": true
+    "vs-kubernetes": {
+        "vscode-kubernetes.minikube-path.mac": "/Users/jason/.vs-kubernetes/tools/minikube/darwin-amd64/minikube"
     },
-    "json.schemas": [
+    "redhat.telemetry.enabled": false,
+    "editor.fontSize": 14,
+    "editor.tabSize": 2,
+    "vim.hlsearch": true,
+    "vim.joinspaces": false,
+    "vim.leader": " ",
+    "vim.changeWordIncludesWhitespace": false,
+    "vim.useSystemClipboard": true,
+    "vim.visualModeKeyBindings": [
+    
+    ],
+    "window.zoomLevel": 1,
+    "vim.normalModeKeyBindings": [
+        // Bookmarks
         {
-            "fileMatch": [ "package.json" ],
-            "url": "file:///Users/jason/repos/schemastore/src/schemas/json/package.json"
+            "before": [ "<leader>", "m" ],
+            "commands": [ "bookmarks.toggle" ]
+        },
+        {
+            "before": [ "<leader>", "b" ],
+            "commands": [ "bookmarks.list" ]
+        },
+        // Indent/outdent
+        {
+            "before": [ ">" ],
+            "commands": [ "editor.action.indentLines" ]
+        },
+        {
+            "before": [ "<" ],
+            "commands": [ "editor.action.outdentLines" ]
+        },
+        // Problems
+        {
+            "before": [ "<leader>", "J" ],
+            "commands": [ "workbench.actions.view.problems" ]
+        },
+        {
+            "before": [ "<leader>", "j" ],
+            "commands": [ "editor.action.marker.next" ]
+        },
+        {
+            "before": [ "<leader>", "k" ],
+            "commands": [ "editor.action.marker.prev" ]
         }
     ],
-    "workbench.iconTheme": "vscode-icons",
-    "editor.fontSize": 14,
-    "editor.rulers": [
-        80,
-        100,
-        120
-    ],
-    "[git-commit]": {
-        "editor.rulers": [
-            50
-        ]
-    },
-    "workbench.colorCustomizations": {
-        "editorRuler.foreground": "#ff0000",
-        "editorError.foreground": "#ff0000",
-        "editorWarning.foreground": "#ff0000",
-        "editorHint.foreground": "#ff0000",
-        "editorError.border": "#ff0000",
-        "editorWarning.border": "#ff0000",
-        "editorHint.border": "#ff0000"
-    },
-    "gitlens.advanced.telemetry.enabled": false,
-    "gitlens.blame.toggleMode": "window",
-    "gitlens.codeLens.authors.enabled": false,
-    "gitlens.codeLens.enabled": false,
-    "vsicons.dontShowNewVersionMessage": true,
-    "mocha.requires": [
-        "@swiper/preload"
-    ],
-    "mocha.files.glob": "packages/*/test/**/*.js",
-    "mocha.parallelTests": 1,
-    "npm.exclude": "**/@(vendor|node_modules|bower_components|dist|static|old-*|OLD-*)/**",
-    "search.useGlobalIgnoreFiles": true,
-    "git.autoRepositoryDetection": false,
-    "git.countBadge": "tracked",
-    "git.detectSubmodules": false,
-    "jake.autoDetect": "off",
-    "grunt.autoDetect": "off",
     "vim.normalModeKeyBindingsNonRecursive": [
         {
-            "before": [
-                "Z",
-                "Z"
-            ],
-            "commands": [
-                ":wq"
-            ]
-        },
-        {
-            "before": [
-                ">"
-            ],
-            "commands": [
-                "editor.action.indentLines"
-            ]
-        },
-        {
-            "before": [
-                "<"
-            ],
-            "commands": [
-                "editor.action.outdentLines"
-            ]
-        },
-        {
-            "before": [
-                "="
-            ],
-            "after": [
-                ""
-            ],
-            "commands": [
-                "editor.action.reindentlines"
-            ]
+            "before": [ "=" ],
+            "after": [ "" ],
+            "commands": [ "editor.action.reindentlines" ]
         }
     ],
     "vim.gdefault": true,
     "vim.incsearch": true,
     "vim.textwidth": 76,
-    "terminal.integrated.fontSize": 18,
-    "files.trimFinalNewlines": true,
-    "editor.acceptSuggestionOnEnter": "off",
-    "workbench.editor.highlightModifiedTabs": true,
-    "workbench.editor.tabCloseButton": "off",
-    "editor.formatOnPaste": true,
-    "files.insertFinalNewline": true,
-    "editor.quickSuggestionsDelay": 1000,
     "editor.renderFinalNewline": false,
-    "vscode-home-assistant.hostUrl": "http://homeassistant.local:8123",
-    "vscode-home-assistant.longLivedAccessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiI2YzdhODUxM2Q3MTk0MzMzODU1ODQyY2Q5NWJiNGI3OSIsImlhdCI6MTU5OTAwNTcyMiwiZXhwIjoxOTE0MzY1NzIyfQ.vwdKsxUpUz_KORToLWSMS4nxk-rP0jI3SyqMp7IiVmE",
-    "diffEditor.ignoreTrimWhitespace": false,
-    "todo-tree.general.tags": [
-        "BUG",
-        "HACK",
-        "FIXME",
-        "TODO",
-        "XXX",
-        "[ ]",
-        "[x]"
-    ],
-    "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\d+.))\\s*($TAGS)",
-    "vim.hlsearch": true,
-    "vim.joinspaces": false,
-    "vim.leader": " ",
-    "vim.showMarksInGutter": true,
-    "vim.normalModeKeyBindings": [
-        {
-            "before": [
-                "<leader>",
-                "j"
-            ],
-            "commands": [
-                "editor.action.marker.next"
-            ],
-        },
-        {
-            "before": [
-                "<leader>",
-                "k"
-            ],
-            "commands": [
-                "editor.action.marker.prev"
-            ],
-        },
-        // Bookmarks
-        {
-            "before": [
-                "<leader>",
-                "m"
-            ],
-            "commands": [
-                "bookmarks.toggle"
-            ]
-        },
-        {
-            "before": [
-                "<leader>",
-                "b"
-            ],
-            "commands": [
-                "bookmarks.list"
-            ]
-        },
-        // Indent/outdent
-        {
-            "before": [
-                ">"
-            ],
-            "commands": [
-                "editor.action.indentLines"
-            ]
-        },
-        {
-            "before": [
-                "<"
-            ],
-            "commands": [
-                "editor.action.outdentLines"
-            ]
-        },
-        // Problems
-        {
-            "before": [
-                "<leader>",
-                "J"
-            ],
-            "commands": [
-                "workbench.actions.view.problems"
-            ]
-        },
-    ],
-    "vim.visualModeKeyBindings": [],
-    "window.zoomLevel": 4,
-    "vim.useSystemClipboard": true,
-    "html.audotClosingTags": false,
-    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-    "redhat.telemetry.enabled": true,
-    "problems.showCurrentInStatus": true,
-    "typescript.tsserver.experimental.enableProjectDiagnostics": true
+    "editor.rulers": [ 80, 100, 120 ],
+    "editor.autoClosingBrackets": "never",
+    "editor.autoSurround": "never",
+    "editor.autoClosingQuotes": "never",
+    "html.autoClosingTags": false,
+    "editor.minimap.enabled": false,
+    "vsicons.dontShowNewVersionMessage": true,
+    "window.clickThroughInactive": false,
+    "editor.cursorBlinking": "expand",
+    "platformio-ide.activateOnlyOnPlatformIOProject": true,
+    "platformio-ide.forceUploadAndMonitor": true,
+    "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+    "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+    "debug.terminal.clearBeforeReusing": true,
+    "html.autoCreateQuotes": false,
+    "vim.commandLineModeKeyBindingsNonRecursive": [
+    
+    ]
 }

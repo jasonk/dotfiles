@@ -2,7 +2,6 @@
 
 # See https://github.com/VSCodeVim/Vim
 if is_mac; then
-  defaults delete -g ApplePressAndHoldEnabled
   defaults write com.microsoft.VSCode ApplePressAndHoldEnabled -bool false
 fi
 

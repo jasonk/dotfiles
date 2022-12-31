@@ -40,6 +40,8 @@
 --ignore-dir=is:dist
 --ignore-dir=is:mochawesome-report
 --ignore-dir=is:venv
+--ignore-dir=is:__pycache__
+--ignore-dir=is:.mypy_cache
 
 --ignore-file=match:/\.log$/
 --ignore-file=match:/\.log\.json$/
