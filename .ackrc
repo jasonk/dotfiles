@@ -36,6 +36,7 @@
 --ignore-dir=is:ARCHIVED
 --ignore-dir=is:OLD
 --ignore-dir=is:bower_components
+--ignore-dir=is:.webpack
 --ignore-dir=is:build
 --ignore-dir=is:dist
 --ignore-dir=is:mochawesome-report

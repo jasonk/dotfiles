@@ -13,6 +13,9 @@ elif (( ! $+commands[node] )); then
   return 1
 fi
 
+if [[ -s "$(brew --prefix nvm)/etc/bash_completion.d/nvm" ]]; then
+  source "$(brew --prefix nvm)/etc/bash_completion.d/nvm"
+fi
 # Load NPM completion.
 if (( $+commands[npm] )); then
   cache_file="${0:h}/cache.zsh"

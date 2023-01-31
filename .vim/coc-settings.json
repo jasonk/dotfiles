@@ -203,5 +203,10 @@
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.linting.mypyEnabled": true,
-  "python.linting.banditEnabled": true
+  "python.linting.banditEnabled": true,
+  "typescript.suggestionActions.enabled": false,
+  "typescript.suggest.enabled": false,
+  "javascript.suggestionActions.enabled": false,
+  "javascript.suggest.enabled": false,
+  "snippets.ultisnips.pythonPrompt": false
 }

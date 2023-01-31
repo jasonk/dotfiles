@@ -11,9 +11,9 @@ if [ -z "$LESSOPEN" ]; then
   fi
 fi
 
-if [ -z "$LESSOPEN" ]; then
-  if [ -f /opt/homebrew/bin/src-hilite-lesspipe.sh ]; then
-    export LESSOPEN="| /opt/homebrew/bin/src-hilite-lesspipe.sh %s"
+if [[ -z "$LESSOPEN" ]] && (( $+commands[brew] )); then
+  if [ -f "$(brew --prefix)/bin/src-hilite-lesspipe.sh" ]; then
+    export LESSOPEN="| $(brew --prefix)/bin/src-hilite-lesspipe.sh %s"
   fi
 fi
 
