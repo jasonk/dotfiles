@@ -10,11 +10,15 @@ set -euo pipefail
 warn() { echo "$@" 1>&2; }
 die() { warn "$@"; exit 1; }
 
+rsyncopts=(
+  --relative --times --recursive --links --perms --compress
+)
 sshopts=(
   -t
   -o "ControlPath=~/.ssh/master-$$"
   -o "ControlMaster=auto"
   -o "ControlPersist=60"
+  -o "PermitLocalCommand=no"
 )
 
 usage() {

@@ -57,7 +57,7 @@
     "vim.gdefault": true,
     "vim.incsearch": true,
     "vim.textwidth": 76,
-    "editor.renderFinalNewline": false,
+    "editor.renderFinalNewline": "off",
     "editor.rulers": [ 80, 100, 120 ],
     "editor.autoClosingBrackets": "never",
     "editor.autoSurround": "never",
@@ -74,5 +74,9 @@
     "debug.terminal.clearBeforeReusing": true,
     "html.autoCreateQuotes": false,
     "vim.commandLineModeKeyBindingsNonRecursive": [
-    ]
+    ],
+    "remote.SSH.defaultForwardedPorts": [],
+    "[python]": {
+        "editor.formatOnType": true
+    }
 }

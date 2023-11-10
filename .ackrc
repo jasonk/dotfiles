@@ -76,6 +76,6 @@
 --ignore-file=is:webpack.json
 --ignore-file=is:lockdown.json
 --ignore-file=is:settings.json
---ignore-file=is:tsconfig.tsbuildinfo
 
+--ignore-file=match:/[.]tsbuildinfo$/
 --ignore-file=match:/[.]log$/

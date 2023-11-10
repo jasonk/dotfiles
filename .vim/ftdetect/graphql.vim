@@ -1,4 +1,4 @@
-au BufNewFile,BufRead *.graphql setfiletype graphql
-au BufNewFile,BufRead *.graphqls setfiletype graphql
-au BufNewFile,BufRead *.gql setfiletype graphql
-au BufNewFile,BufRead *.gqls setfiletype graphql
+au BufNewFile,BufRead *.graphql set filetype=graphql
+au BufNewFile,BufRead *.graphqls set filetype=graphql
+au BufNewFile,BufRead *.gql set filetype=graphql
+au BufNewFile,BufRead *.gqls set filetype=graphql

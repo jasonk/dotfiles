@@ -30,7 +30,6 @@ function usage() {
     '  -u, --url <string..>       Select tabs by URL',
     '',
     'Options:',
-    '  -a, --alfred         Turn on Alfred mode',
     '  -f, --force          Force closing tabs, even if it\'s most of them',
   );
   $.exit( 1 );
@@ -74,78 +73,31 @@ function iterateTabs( callback, opts ) {
   let count = 0;
   for ( const win of chrome.windows() ) {
     for ( const tab of win.tabs() ) {
-      const id = String( tab.id() );
-      const url = tab.url();
-      const title = tab.title();
-      debug( `${id}: ${url} (${title})` );
-      const info = { id, url, title, tab };
-      if ( tabMatches( info, opts ) ) {
-        callback( info );
-        count++;
+      try {
+        const id = String( tab.id() );
+        const url = tab.url();
+        const title = tab.title();
+        debug( `${id}: ${url} (${title})` );
+        const info = { id, url, title, tab };
+        if ( tabMatches( info, opts ) ) {
+          callback( info );
+          count++;
+        }
+        if ( opts.limit && count === opts.limit ) return;
+      } catch ( error ) {
+        print( 'ERROR: ' + error.message );
       }
-      if ( opts.limit && count === opts.limit ) return;
     }
   }
 }
 
-function collectTabs( opts ) {
-  const tabs = [];
-  let total = 0;
-  for ( const win of chrome.windows() ) {
-    for ( const tab of win.tabs() ) {
-      total++;
-      const id = tab.id();
-      const url = tab.url();
-      const title = tab.title();
-      const info = { id, url, title, tab };
-      if ( tabMatches( info, opts ) ) tabs.push( info );
-      if ( opts.limit && tabs.length === opts.limit ) return tabs;
-    }
-  }
-  tabs.total = total;
-  tabs.percent = Math.round( ( tabs.length / total ) * 100 );
-  return tabs;
+function emitTab( { id, url, title } ) {
+  print( JSON.stringify( { id, url, title } ) );
 }
-
-function getTabs( opts ) {
-  const tabs = collectTabs( opts );
-  if ( opts.sort ) {
-    if ( opts.sort === true ) opts.sort = 'title';
-    const s = opts.sort;
-    tabs.sort( ( a, b ) => a[s].localeCompare( b[s] ) );
-  }
-  if ( opts.group ) {
-    if ( opts.group === true ) opts.group = 'url';
-    const g = opts.group;
-    const groups = {};
-    getTabs( opts ).forEach( tab => {
-      ( groups[ tab[g] ] || ( groups[ tab[g] ] = [] ) ).push( tab );
-    } );
-    return groups;
-  }
-  return tabs;
-}
+function emitTabs( opts ) { iterateTabs( emitTab, opts ); }
 
 const commands = {
-  list( opts ) {
-    const tabs = getTabs( opts );
-    if ( opts.alfred ) return { items : tabs };
-    return tabs;
-  },
-  count( opts ) {
-    const tabs = getTabs( opts );
-    return tabs.length;
-  },
-  dups( opts={} ) {
-    const seen = new Set();
-    iterateTabs( tab => {
-      if ( seen.has( tab.url ) ) {
-        print( `${tab.id}: ${tab.url} (${tab.title})` );
-      } else {
-        seen.add( tab.url );
-      }
-    }, opts );
-  },
+  list( opts ) { emitTabs( opts ); },
   dedup( opts={} ) {
     const seen = new Set();
     iterateTabs( tab => {
@@ -157,16 +109,10 @@ const commands = {
     }, opts );
   },
   close( opts={} ) {
-    const tabs = getTabs( opts );
-    if ( tabs.percent > 50 ) {
-      print( 'This is more than half of your tabs!' );
-      if ( ! opts.force ) {
-        print( 'Specify --force to do it anyway' );
-        return;
-      }
-    }
-    tabs.forEach( ( { tab } ) => tab.close() );
-    return tabs;
+    iterateTabs( tab => {
+      emitTab( tab );
+      tab.tab.close();
+    }, opts );
   },
   raise( opts ) {
     const id = parseInt( opts.any[0] || opts.ids[0] );
@@ -179,12 +125,12 @@ const commands = {
         win.visible = true;
         win.index = 1;
         chrome.activate();
+        return;
       }
     }
   },
   help() { usage(); },
 };
-commands.dedupe = commands.dedup;
 
 function run( argv ) {
   if ( ! argv.length ) usage();
@@ -208,8 +154,6 @@ function run( argv ) {
       what = opts.urls;
     } else if ( arg === '--any' || arg === '-a' ) {
       what = opts.any;
-    } else if ( arg === '--alfred' || arg === '-A' ) {
-      opts.alfred = true;
     } else if ( arg === '--force' || arg === '-f' ) {
       opts.force = true;
     } else if ( arg === '--debug' || arg === '-d' ) {

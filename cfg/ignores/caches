@@ -1,8 +1,5 @@
-# These are cache directories/files that you don't want to commit..
-#
 # IMPORTANT: If you edit this file directly you have to run `cfg
 # ignore` to update the "real" gitignore file that git actually uses!
-#
 /.Trash
 /.ansible*
 /.appdata-local
@@ -18,11 +15,22 @@
 /.bundler
 /.bzr.log
 /.cache
+/.cargo
+/.chirp
 /.cisco
+/.cmake
 /.config/.isolated-storage
 /.config/Autodesk
+/.config/Fritzing
+/.config/coc/extensions/coc-json-data
+/.config/coc/list_history.dat
+/.config/coc/snippets-mru
+/.config/coc/suggest.txt
+/.config/iTerm2/AppSupport
+/.config/op
 /.config/verdaccio/storage
 /.cookiecutter_replay
+/.cookiecutters
 /.cordova
 /.cpanm
 /.cpanplus
@@ -41,11 +49,15 @@
 /.heroku
 /.inkscape-etc
 /.ipfs
+/.ipython
 /.jssc
+/.jupyter
 /.kube/cache
 /.kube/http-cache
 /.local
+/.matplotlib
 /.meteor
+/.minikube
 /.minikube/cache
 /.minikube/logs
 /.ndb
@@ -58,17 +70,20 @@
 /.pdk/cache
 /.perlbrew
 /.pip
+/.pkg-cache
 /.platformio
 /.pm2
 /.pm2-dev
 /.pnpm-store
 /.pylint.d
+/.qet
 /.r10k
 /.rbenv
 /.redhat
 /.resty
 /.rnd
 /.rvm
+/.skaffold
 /.terraform.d
 /.travis
 /.v8flags.*.json

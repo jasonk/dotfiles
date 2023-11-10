@@ -10,5 +10,8 @@
     "coc-snippets": ">=3.1.6",
     "coc-tsserver": ">=2.1.0",
     "coc-yaml": ">=1.9.0"
-  }
+  },
+  "disabled": [],
+  "locked": [],
+  "lastUpdate": 1699558290214
 }

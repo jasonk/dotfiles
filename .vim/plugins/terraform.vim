@@ -1,1 +1,1 @@
-" Plugin 'markcornick/vim-terraform'
+" Diabled 'markcornick/vim-terraform'

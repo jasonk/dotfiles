@@ -1,0 +1,207 @@
+{
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.messageLevel": "error",
+  "coc.preferences.currentFunctionSymbolAutoUpdate": true,
+  // "coc.preferences.formatOnSaveFiletypes": [
+  //   "go"
+  // ],
+  "coc.preferences.formatOnType": false,
+  // "coc.preferences.snippetHighlight": false,
+  // "inlayHint.filetypes": ["*"],
+  "inlayHint.filetypes": [],
+  "inlayHint.refreshOnInsertMode": false,
+  "inlayHint.enableParameter": true,
+  "inlayHint.typeSeparator": "« ", // "‣
+  "inlayHint.parameterSeparator": "» ",
+  "inlayHint.subSeparator": " ",
+  // "diagnostic.errorSign": "", //  ••
+  // "diagnostic.warningSign": "", //  •
+  // "diagnostic.hintSign": "", // •
+  // "diagnostic.infoSign": "", // •
+  // "diagnostic.checkCurrentLine": false,
+  // "diagnostic.level": "hint",
+  // "diagnostic.autoRefresh": true,
+  // "diagnostic.refreshOnInsertMode": false,
+  // "diagnostic.locationlistUpdate": true,
+  // "diagnostic.virtualText": true,
+  // "diagnostic.virtualTextLineSeparator": " \\ ",
+  // "diagnostic.virtualTextPrefix": " | ",
+  // "diagnostic.virtualTextCurrentLineOnly": true,
+  // "diagnostic.format": "%message [%source%code]", // %source code severity message
+  // "diagnostic.signPriority": 50,
+  // "diagnostic.enableHighlightLineNumber": true,
+  // "diagnostic.messageTarget": "float",
+  // "diagnostic.separateRelatedInformationAsDiagnostics": true,
+  "diagnostic-languageserver.filetypes": {
+    "zsh": "shellcheck",
+    "sh": "shellcheck",
+    "yaml": [ "yamllint" ],
+    "systemd": "systemd-analyze"
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "sh": "shfmt",
+    "zsh": "shfmt"
+  },
+  // ╭──────────────────────────────────────────────────────────╮
+  // │                    Config file types                     │
+  // ╰──────────────────────────────────────────────────────────╯
+  "json.trace.server": "off",
+  "json.schemaDownload.enable": true,
+  "json.schemas": [
+    {
+      "description": "TypeScript compiler configuration file",
+      "fileMatch": ["tsconfig.json", "tsconfig.*.json"],
+      "url": "https://json.schemastore.org/tsconfig.json"
+    },
+    {
+      "description": "Babel configuration",
+      "fileMatch": [".babelrc.json", ".babelrc", "babel.config.json"],
+      "url": "https://json.schemastore.org/babelrc.json"
+    },
+    {
+      "description": "ESLint config",
+      "fileMatch": [".eslintrc.json", ".eslintrc"],
+      "url": "https://json.schemastore.org/eslintrc.json"
+    },
+    {
+      "description": "Prettier config",
+      "fileMatch": [".prettierrc", ".prettierrc.json", "prettier.config.json"],
+      "url": "https://json.schemastore.org/prettierc"
+    },
+    {
+      "description": "Lerna config",
+      "fileMatch": ["lerna.json"],
+      "url": "https://json.schemastore.org/lerna.json"
+    },
+    {
+      "description": "Config file for Command Task Runner",
+      "fileMatch": ["commands.json"],
+      "url": "https://json.schemastore.org/commands.json"
+    },
+    {
+      "description": "NPM configuration file",
+      "fileMatch": ["package.json"],
+      "url": "https://json.schemastore.org/package.json"
+    }
+  ],
+  "yaml.trace.server": "off",
+  "yaml.schemaStore.enable": true,
+  "yaml.schemas": {},
+  "yaml.validate": true,
+  "yaml.format.singleQuote": true,
+  "yaml.completion": true,
+  "yaml.customTags": [
+    "!secret scalar",
+    "!lambda scalar"
+  ],
+  // ╭──────────────────────────────────────────────────────────╮
+  // │                  Typescript/Javascript                   │
+  // ╰──────────────────────────────────────────────────────────╯
+  "eslint.packageManager": "yarn",
+  "eslint.run": "onSave",
+  "eslint.trace.server": "off",
+  "eslint.autoFixOnSave": false,
+  "eslint.format.enable": false,
+  "tsserver.trace.server": "off",
+  // Typescript
+  "typescript.format.enabled": false,
+  "typescript.preferences.quoteStyle": "double",
+  "typescript.preferences.useAliasesForRenames": false,
+  "typescript.format.semicolons": "insert",
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "typescript.format.insertSpaceBeforeFunctionParenthesis": false,
+  "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+  // FIX: The codelens and inlayhints swap places when typing (create an issue if I can't)
+  "typescript.referencesCodeLens.showOnAllFunctions": true,
+  "typescript.implementationsCodeLens.enable": true,
+  "typescript.referencesCodeLens.enable": false,
+  "typescript.inlayHints.parameterNames.enabled": "literals",
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.enumMemberValues.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+  // Javascript
+  "javascript.format.enabled": false,
+  "javascript.preferences.quoteStyle": "double",
+  "javascript.format.semicolons": "insert",
+  "javascript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+  "javascript.inlayHints.parameterNames.enabled": "all",
+  "javascript.inlayHints.variableTypes.enabled": true,
+  "javascript.inlayHints.parameterTypes.enabled": true,
+  "javascript.inlayHints.enumMemberValues.enabled": true,
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "javascript.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+  "html.trace.server": "off",
+  "css.trace.server": "off",
+
+  "markdownlint.config": {
+    "default": true,
+    "line-length": false
+  },
+  // ╭──────────────────────────────────────────────────────────╮
+  // │                      Language Server                     │
+  // ╰──────────────────────────────────────────────────────────╯
+  "languageserver": {
+    // "bash": {
+    //   "command": "bash-language-server",
+    //   "args": ["start"],
+    //   "filetypes": ["sh"]
+    // },
+    /*
+    "efm": {
+      "initializationOptions": {
+        "documentFormatting": true
+      },
+      "command": "efm-langserver",
+      "args": [],
+      "filetypes": ["sh", "python"],
+      "settings": {
+        "rootMarkers": [".git/"],
+        "languages": {
+          "sh": [
+            {
+              "lintCommand": "shellcheck -f gcc -x",
+              "lintSource": "shellcheck",
+              "lintFormats": [
+                "%f:%l:%c: %trror: %m",
+                "%f:%l:%c: %tarning: %m",
+                "%f:%l:%c: %tarning: %m"
+              ],
+              "formatCommand": "shfmt -i 2",
+              "formatStdin": true
+            }
+          ],
+          "python": [
+            {
+              // "lintCommand": "mypy --show-column-numbers",
+              // "lintSource": "mypy",
+              // "lintFormats": [
+                // "%f:%l:%c: %trror: %m",
+                // "%f:%l:%c: %tarning: %m",
+                // "%f:%l:%c: %tote: %m"
+              // ]
+            }
+          ]
+        }
+      }
+    },
+    */
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["dockerfile"],
+      "args": ["--stdio"]
+    }
+  },
+  "pyright.enable": true,
+  "python.pythonPath": "python3.10",
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.mypyEnabled": true,
+  "python.linting.banditEnabled": true
+}
