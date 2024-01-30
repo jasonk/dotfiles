@@ -74,6 +74,8 @@
     "typescript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
     "debug.terminal.clearBeforeReusing": true,
     "html.autoCreateQuotes": false,
+    "vim.commandLineModeKeyBindingsNonRecursive": [
+    ],
     "remote.SSH.defaultForwardedPorts": [],
     "[python]": {
         "editor.formatOnType": true

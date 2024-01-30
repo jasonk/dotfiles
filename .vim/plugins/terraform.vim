@@ -1,1 +1,1 @@
-" Diabled 'markcornick/vim-terraform'
+" Disabled 'markcornick/vim-terraform'
