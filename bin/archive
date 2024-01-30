@@ -3,8 +3,10 @@
 REPO="$(git rev-parse --show-toplevel)"
 ARCHIVE="${REPO}/ARCHIVED"
 
-if ! grep -q '/ARCHIVED' "$REPO/.git/info/exclude"; then
-  echo '/ARCHIVED' >> "$REPO/.git/info/exclude"
+if [ -f "$REPO/.git/info/exclude" ]; then
+  if ! grep -q '/ARCHIVED' "$REPO/.git/info/exclude"; then
+    echo '/ARCHIVED' >> "$REPO/.git/info/exclude"
+  fi
 fi
 
 for SRC in "$@"; do

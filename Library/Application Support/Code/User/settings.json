@@ -66,6 +66,7 @@
     "editor.minimap.enabled": false,
     "vsicons.dontShowNewVersionMessage": true,
     "window.clickThroughInactive": false,
+    "window.zoomLevel": 2,
     "editor.cursorBlinking": "expand",
     "platformio-ide.activateOnlyOnPlatformIOProject": true,
     "platformio-ide.forceUploadAndMonitor": true,

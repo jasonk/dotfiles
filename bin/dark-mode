@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CMD='tell app "System Events" to tell appearance preferences to set dark mode'
+
+case "${1:-}" in
+  --help) echo "Usage: $0 [on|off|toggle]" ; exit ;;
+  on|off) osascript -e "$CMD to $1" ; exit ;;
+  toggle) osascript -e "$CMD to not dark mode" ; exit ;;
+esac
+
+if defaults read -globalDomain AppleInterfaceStyle &> /dev/null; then
+  echo "Dark mode: on"
+  exit 0
+else
+  echo "Dark mode: off"
+  exit 1
+fi

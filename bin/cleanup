@@ -45,6 +45,8 @@ if [ -d ~/.pm2/logs ]; then rm -f ~/.pm2/logs/*.log; fi
 if havecmd brew; then brew cleanup; fi
 if havecmd yarn; then yarn cache clean; fi
 if havecmd cypress; then cypress cache clear; fi
+if havecmd nvm; then nvm cache clear; fi
+if havecmd npm; then npm cache clear --force; fi
 
 only-keep-newest-version \
   "$HOME/Library/Caches/typescript/*" \

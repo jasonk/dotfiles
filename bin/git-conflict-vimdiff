@@ -1,0 +1,15 @@
+#!/bin/bash
+set -euo pipefail
+
+for FILE; do
+  EXT="${FILE##*.}"
+  BASE="${FILE%.*}"
+  echo "[$FILE][$EXT]"
+  cp "$FILE" "$BASE.conflict.$EXT"
+  git checkout --theirs "$FILE"
+  cp "$FILE" "$BASE.theirs.$EXT"
+  git checkout --ours "$FILE"
+  cp "$FILE" "$BASE.ours.$EXT"
+  cp "$BASE.conflict.$EXT" "$FILE"
+  vimdiff "$BASE.conflict.$EXT" "$BASE.ours.$EXT" "$BASE.theirs.$EXT"
+done

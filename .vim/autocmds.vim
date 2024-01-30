@@ -15,11 +15,11 @@ autocmd BufNewFile,BufEnter * set formatoptions-=o
 " This must be after the uncompress commands.
 autocmd BufReadPost *
     \ if line("'\"") > 1 && line ("'\"") <= line("$") |
-    \   exe "normal! g`\"" |
+    \   exe "normal! g`\"zz" |
     \ endif
 
 " Fix trailing whitespace in my most used programming langauges
-autocmd BufWritePre *.py,*.scss,*.vim,Cakefile,*.js,*.ts,*.tsx
+autocmd BufWritePre *.py,*.scss,*.sass,*.vim,*.js,*.ts,*.tsx
     \ silent! :StripTrailingWhiteSpace
 
 " Help mode bindings

@@ -18,8 +18,8 @@ title() {
   # ESC]1;stringBEL -- Set icon name to string.
   # ESC]2;stringBEL -- Set window title to string
 
+  # Don't set title over serial console.
   case $TTY in
-    # Don't set title over serial console.
     /dev/ttyS[0-9]*) return;;
   esac
 
@@ -102,7 +102,7 @@ _jasonk_title_preexec() {
   local CMD=${1[(wr)^(*=*|sudo|ssh|mosh|rake|-*)]:gs/%/%%}
   local LINE="${2:gs/%/%%}"
 
-  title "$CMD" "%100>...>$LINE%<<"
+  title '$CMD' '%100>...>$LINE%<<'
 }
 
 add-zsh-hook preexec _jasonk_title_preexec

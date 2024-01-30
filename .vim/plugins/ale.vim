@@ -58,3 +58,5 @@ let g:ale_fixers         = {
       \ 'terraform'  : [ 'terraform'                                ],
       \ 'html'       : [ 'prettier'                                 ],
       \ }
+let g:ale_sh_shellcheck_change_directory = 0
+let g:ale_sh_shellcheck_options = '-x -P SCRIPTDIR'
