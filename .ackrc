@@ -45,6 +45,7 @@
 
 --ignore-file=match:/\.log$/
 --ignore-file=match:/\.log\.json$/
+--ignore-file=match:/\.svg/
 
 --ignore-dir=match:/\.0x$/
 #--ignore-dir=match:/[.]cached$/

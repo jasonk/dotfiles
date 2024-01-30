@@ -2,7 +2,7 @@
 autoload -U zutil
 autoload compinit && {
   autoload -U complist
-  compinit -i -d $CACHE/zcompdump
+  compinit -i -d "$CACHE/zcompdump"
 }
 
 setopt auto_menu
@@ -22,7 +22,7 @@ zstyle ':completion:*:*:kill:*:processes' \
 zstyle ':completion:*:kill:*' force-list always
 zstyle ':completion:*:processes' command "ps -eo pid,user,comm,cmd -w -w"
 zstyle ':completion::complete:*' use-cache 1
-zstyle ':completion::complete:*' cache-path $CACHE/completions/
+zstyle ':completion::complete:*' cache-path "$CACHE/completions/"
 zstyle ':completion:*:descriptions' format '%B%d%b'
 zstyle ':completion:*:functions' ignored-patterns '_*'
 zstyle ':completion:*:match:*' original only
@@ -45,7 +45,7 @@ zstyle ':completion::*:ssh:*:*' tag-order "users hosts"
 _custom_hosts() {
   # Complete ~/.zsh/local/hosts.*
   local host
-  for host in $ZSH/local/hosts.*(N-.); do
+  for host in "$ZSH"/local/hosts.*(N-.); do
     _wanted hosts expl "remote host name" compadd "$@" $(<$host)
   done
 }

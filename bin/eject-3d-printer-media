@@ -1,0 +1,13 @@
+#!/bin/bash
+
+while IFS= read -r name; do
+  size="$(df -m "/Volumes/$name" | grep -v '^Filesystem ' | awk '{print $2}')"
+  echo "Checking volume /Volumes/$name ($size MiB)"
+  if ! cd "/Volumes/$name"; then
+    echo "Failed to chdir, skipping" 1>&2
+    continue
+  fi
+  rm -rf ._* .Spotlight-* .fseventsd
+  cd /Volumes || exit 1
+  hdiutil eject "/Volumes/$name"
+done < <( mount | awk '{print $3}' | sed -n 's#^/Volumes/##p' )

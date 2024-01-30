@@ -92,7 +92,8 @@
   "yaml.completion": true,
   "yaml.customTags": [
     "!secret scalar",
-    "!lambda scalar"
+    "!lambda scalar",
+    "!translate scalar"
   ],
   // ╭──────────────────────────────────────────────────────────╮
   // │                  Typescript/Javascript                   │
@@ -153,16 +154,20 @@
     //   "args": ["start"],
     //   "filetypes": ["sh"]
     // },
-    /*
     "efm": {
       "initializationOptions": {
-        "documentFormatting": true
+        "documentFormatting": false,
+        "documentRangeFormatting": true,
+        "hover": true,
+        "documentSymbol": true,
+        "codeAction": true,
+        "completion": true
       },
       "command": "efm-langserver",
       "args": [],
-      "filetypes": ["sh", "python"],
+      "filetypes": [ "sh", "python" ],
       "settings": {
-        "rootMarkers": [".git/"],
+        "rootMarkers": [ ".git/" ],
         "languages": {
           "sh": [
             {
@@ -173,25 +178,73 @@
                 "%f:%l:%c: %tarning: %m",
                 "%f:%l:%c: %tarning: %m"
               ],
+            },
+            {
               "formatCommand": "shfmt -i 2",
               "formatStdin": true
             }
           ],
           "python": [
+            /*
             {
-              // "lintCommand": "mypy --show-column-numbers",
-              // "lintSource": "mypy",
-              // "lintFormats": [
-                // "%f:%l:%c: %trror: %m",
-                // "%f:%l:%c: %tarning: %m",
-                // "%f:%l:%c: %tote: %m"
-              // ]
-            }
+              "lintCommand": "mypy --show-column-numbers",
+              "lintSource": "mypy",
+              "lintFormats": [
+                "%f:%l:%c: %trror: %m",
+                "%f:%l:%c: %tarning: %m",
+                "%f:%l:%c: %tote: %m"
+              ]
+            },
+            */
+            /*
+            {
+              "formatCommand": "autopep8 -",
+              "formatStdin": true
+            },
+            {
+              "formatCommand": "black --quiet -",
+              "formatStdin": true
+            },
+            */
+            {
+              "formatCommand": "isort --quiet -",
+              "formatStdin": true
+            },
+            /*
+            {
+              "formatCommand": "yapf --quiet",
+              "formatStdin": true
+            },
+            {
+              "lintCommand": "flake8 --stdin-display-name ${INPUT} -",
+              "lintStdin": true,
+              "lintFormats": [
+                "%f:%l:%c: %m"
+              ]
+            },
+            */
+            /*
+            {
+              "lintCommand": "pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
+              "lintStdin": false,
+              "lintOffsetColumns": 1,
+              "lintFormats": [
+                "%f:%l:%c:%t:%m"
+              ],
+              "lintCategoryMap": {
+                "I": "H",
+                "R": "I",
+                "C": "I",
+                "W": "W",
+                "E": "E",
+                "F": "E"
+              },
+            },
+            */
           ]
         }
       }
     },
-    */
     "dockerfile": {
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
@@ -199,9 +252,10 @@
     }
   },
   "pyright.enable": true,
-  "python.pythonPath": "python3.10",
+  "pyright.server": "/Users/jason/repos/pyright/packages/pyright/langserver.index.js",
+  "python.pythonPath": "python3",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
   "python.linting.mypyEnabled": true,
-  "python.linting.banditEnabled": true
+  "python.linting.banditEnabled": false
 }

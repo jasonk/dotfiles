@@ -105,6 +105,17 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
+autocmd FileType python let b:coc_root_patterns = [
+\ '.git',
+\ '.env',
+\ 'venv',
+\ '.venv',
+\ 'setup.cfg',
+\ 'setup.py',
+\ 'pyrightconfig.json',
+\ 'env'
+\ ]
+
 " Symbol renaming.
 nmap <leader>rn <Plug>(coc-rename)
 
