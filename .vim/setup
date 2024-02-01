@@ -3,7 +3,7 @@
 import os, pwd
 from pathlib import Path
 from rich.pretty import pprint
-from subprocess import run as _run
+from subprocess import run as _run, CalledProcessError
 
 USER = pwd.getpwuid( os.getuid() )[0]
 VIM_DIR = Path.home() / '.vim'
@@ -18,32 +18,51 @@ REPO_DIRS: set[Path] = set()
 
 def run( *args, **kwargs ):
     kwargs.setdefault( 'check', True )
-    return _run( args, **kwargs )
+    kwargs.setdefault( 'capture_output', True )
+    if kwargs.get( 'capture_output' ):
+        return _run( args, **kwargs ).stdout.decode().strip()
+    else:
+        return _run( args, **kwargs )
+
+def current_head( repo_dir: Path ) -> str:
+    return run( 'git', 'rev-parse', 'HEAD', cwd = repo_dir )
 
 def update_repo(
     url: str, repo_dir: Path, *,
     branch: str | None = None,
     depth: int | None = None,
     **_,
-):
+) -> bool:
+    REPO_DIRS.add( repo_dir )
     repo_dir.parent.mkdir( parents = True, exist_ok = True )
     if repo_dir.is_dir():
-        if branch: run( 'git', 'checkout', branch, cwd = repo_dir )
-        run( 'git', 'pull', '--ff-only', '--no-rebase', cwd = repo_dir )
+        before = current_head( repo_dir )
+        if branch:
+            out = run( 'git', 'checkout', branch, cwd = repo_dir )
+            if not out.startswith( 'Already on ' ): print( out )
+        out = run( 'git', 'pull', '--ff-only', '--no-rebase', cwd = repo_dir )
+        if out != 'Already up to date.': print( out )
+        after = current_head( repo_dir )
+        return before != after
     else:
         args = []
         if branch: args += [ '-b', branch ]
         if depth: args += [ '--depth', depth ]
         run( 'git', 'clone', *args, url, str( repo_dir ) )
+        return True
 
 def process_plugin( file: Path ):
 
     name = file.stem
+    text = file.read_text().strip()
 
-    for line in file.read_text().splitlines():
+    had_changes = False
+
+    for line in text.splitlines():
         if not line.startswith( '" ' ): return
         line = line.lstrip( '" ' )
         if not len( line ): continue
+        if ' ' not in line: continue
         cmd, args = line.split( ' ', 1 )
         cmd = cmd.lower().strip()
         args = args.strip( "' " )
@@ -59,21 +78,30 @@ def process_plugin( file: Path ):
                 opts[ l ] = r
             pack_name = opts.get( 'name', Path( repo ).stem )
             pack_dir = PACKS_DIR / pack_name
-            PACKS.add( pack_name )
-            url = 'https://github.com/' + repo
-            if subdir := opts.pop( 'directory', None ):
-                repo_dir = VIM_DIR / 'repos' / name
-                update_repo( url, repo_dir, **opts )
-                run(
-                    'rsync', '-avPH', '--delete',
-                    str( repo_dir / subdir ) + '/',
-                    str( pack_dir ) + '/',
-                )
+            REPO_DIRS.add( pack_dir )
+            if '://' in repo:
+                url = repo
             else:
-                update_repo( url, pack_dir, **opts )
+                url = 'https://github.com/' + repo
+            if subdir := opts.pop( 'directory', None ):
+                repo_dir = VIM_DIR / 'repos' / pack_name
+                if update_repo( url, repo_dir, **opts ):
+                    run(
+                        'rsync', '-avPH', '--delete',
+                        str( repo_dir / subdir ) + '/',
+                        str( pack_dir ) + '/',
+                    )
+                    had_changes = True
+            else:
+                if update_repo( url, pack_dir, **opts ):
+                    had_changes = True
         elif cmd == 'postinstall':
+            if not had_changes: continue
             print( f'Running postinstall for {name} in {pack_dir}' )
-            run( 'bash', '-c', args, cwd = pack_dir )
+            try:
+                run( 'bash', '-c', args, cwd = pack_dir )
+            except CalledProcessError as ex:
+                print( 'PostInstall failed:', ex )
         else:
             print( 'Unknown command:', line )
 
@@ -83,7 +111,7 @@ for file in PLUGINS_DIR.iterdir():
     process_plugin( file )
 
 for subdir in PACKS_DIR.iterdir():
-    if subdir not in PACKS:
+    if subdir not in REPO_DIRS:
         run( 'rm', '-rf', str( subdir ) )
 
 ( VIM_DIR / 'plugins.vim' ).write_text( '\n'.join( [

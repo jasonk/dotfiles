@@ -1,4 +1,4 @@
-" Disable 'dense-analysis/ale'
+" Disabled 'dense-analysis/ale'
 
 let g:ale_linters = {
   \ 'javascript': [ 'eslint' ],
