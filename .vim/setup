@@ -2,7 +2,6 @@
 
 import os, pwd
 from pathlib import Path
-from rich.pretty import pprint
 from subprocess import run as _run, CalledProcessError
 
 USER = pwd.getpwuid( os.getuid() )[0]

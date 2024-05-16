@@ -52,3 +52,21 @@ function toCSV( opts={} ) {
     printcsv( columns.map( c => rec[ c ] ) );
   } );
 }
+
+DBQuery.prototype.stats = DBCommandCursor.prototype.stats = Array.prototype.stats = stats;
+function stats( array ) {
+  const mean = array.reduce((a, b) => a + b) / array.length;
+  const stddev = ( population = false ) => Math.sqrt(
+    array
+      .reduce( (acc, val) => acc.concat((val - mean) ** 2), [] )
+      .reduce((acc, val) => acc + val, 0) /
+      (arr.length - (population ? 0 : 1))
+  );
+  return {
+    min : Math.min( array ),
+    max : Math.max( array ),
+    mean,
+    stddev_s : stddev( false ),
+    stddev_p : stddev( true ),
+  };
+}

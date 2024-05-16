@@ -32,6 +32,7 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   "$HOME/bin"
+  "$HOME/.local/bin"
   "$HOME/.yarn/.bin"
   "$HOME/.config/yarn/global/node_modules/.bin"
   /usr/local/bin
@@ -42,9 +43,17 @@ path=(
   /sbin
   /opt/homebrew/bin
   /opt/homebrew/sbin
+  "$HOME/.docker/bin"
   $path
 )
 
 export ZSH_CACHE="$HOME/.cache/zsh"
 
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
+
+if [ -d ~/.env ]; then
+  set -o allexport;
+  for file ( ~/.env/*.env ) source "$file"
+  set +o allexport
+  for file ( ~/.env/*.sh ) source "$file"
+fi

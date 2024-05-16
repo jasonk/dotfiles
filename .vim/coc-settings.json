@@ -177,7 +177,7 @@
                 "%f:%l:%c: %trror: %m",
                 "%f:%l:%c: %tarning: %m",
                 "%f:%l:%c: %tarning: %m"
-              ],
+              ]
             },
             {
               "formatCommand": "shfmt -i 2",
@@ -252,7 +252,6 @@
     }
   },
   "pyright.enable": true,
-  "pyright.server": "/Users/jason/repos/pyright/packages/pyright/langserver.index.js",
   "python.pythonPath": "python3",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": true,
@@ -263,4 +262,4 @@
   "javascript.suggestionActions.enabled": false,
   "javascript.suggest.enabled": false,
   "snippets.ultisnips.pythonPrompt": false
-}
+} // vim:ft=jsonc
