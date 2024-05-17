@@ -60,9 +60,9 @@ prompt_pure_set_title() {
   # Emacs terminal does not support settings the title.
   (( ${+EMACS} || ${+INSIDE_EMACS} )) && return
 
+  # Don't set title over serial console.
   case $TTY in
-    # Don't set title over serial console.
-    /dev/ttyS[0-9]*) return;;
+    /dev/ttyS[0-9]*) return ;;
   esac
 
   # Show hostname if connected via SSH.
@@ -78,7 +78,8 @@ prompt_pure_set_title() {
     ignore-escape) opts=(-r);;
   esac
 
-  # Set title atomically in one print statement so that it works when XTRACE is enabled.
+  # Set title atomically in one print statement so that it works when
+  # XTRACE is enabled.
   print -n $opts $'\e]0;'${hostname}${2}$'\a'
 }
 
@@ -95,7 +96,8 @@ prompt_pure_preexec() {
 
   typeset -g prompt_pure_cmd_timestamp=$EPOCHSECONDS
 
-  # Shows the current directory and executed command in the title while a process is active.
+  # Shows the current directory and executed command in the title
+  # while a process is active.
   prompt_pure_set_title 'ignore-escape' "$PWD:t: $2"
 
   # Disallow Python virtualenv from updating the prompt. Set it to 12 if
@@ -124,7 +126,8 @@ prompt_pure_preprompt_render() {
 
   unset prompt_pure_async_render_requested
 
-  # Set color for Git branch/dirty status and change color if dirty checking has been delayed.
+  # Set color for Git branch/dirty status and change color if dirty
+  # checking has been delayed.
   local git_color=$prompt_pure_colors[git:branch]
   local git_dirty_color=$prompt_pure_colors[git:dirty]
   [[ -n ${prompt_pure_git_last_dirty_check_timestamp+x} ]] && git_color=$prompt_pure_colors[git:branch:cached]
@@ -367,7 +370,7 @@ prompt_pure_async_git_aliases() {
   local -a gitalias pullalias
 
   # List all aliases and split on newline.
-  gitalias=(${(@f)"$(command git config --get-regexp "^alias\.")"})
+  gitalias=(${(@f)"$(_git config --get-regexp "^alias\.")"})
   for line in $gitalias; do
     parts=(${(@)=line})           # Split line on spaces.
     aliasname=${parts[1]#alias.}  # Grab the name (alias.[name]).
@@ -416,7 +419,7 @@ prompt_pure_async_vcs_info() {
 prompt_pure_async_git_dirty() {
   setopt localoptions noshwordsplit
   local untracked_dirty=$1
-  local untracked_git_mode=$(command git config --get status.showUntrackedFiles)
+  local untracked_git_mode=$(_git config --get status.showUntrackedFiles)
   if [[ "$untracked_git_mode" != 'no' ]]; then
     untracked_git_mode='normal'
   fi
@@ -443,9 +446,9 @@ prompt_pure_async_git_fetch() {
   local -a remote
   if ((only_upstream)); then
     local ref
-    ref=$(command git symbolic-ref -q HEAD)
+    ref=$(_git symbolic-ref -q HEAD)
     # Set remote to only fetch information for the current branch.
-    remote=($(command git for-each-ref --format='%(upstream:remotename) %(refname)' $ref))
+    remote=($(_git for-each-ref --format='%(upstream:remotename) %(refname)' $ref))
     if [[ -z $remote[1] ]]; then
       # No remote specified for this branch, skip fetch.
       return 97
@@ -956,8 +959,8 @@ prompt_pure_setup() {
   fi
 
   # If a virtualenv is activated, display it in grey.
-  #PROMPT='%(12V.%F{$prompt_pure_colors[virtualenv]}%12v%f .)'
-  PROMPT=''
+  PROMPT='%(12V.%F{$prompt_pure_colors[virtualenv]}%12v%f .)'
+  # PROMPT=''
 
   # Prompt turns red if the previous command didn't exit with 0.
   local prompt_indicator='%(?.%F{$prompt_pure_colors[prompt:success]}.%F{$prompt_pure_colors[prompt:error]})${prompt_pure_state[prompt]}%f '

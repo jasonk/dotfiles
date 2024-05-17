@@ -1,8 +1,11 @@
 [user]
   name = Jason Kohles
+  email = email@jasonkohles.com
 
 [init]
   templateDir = ~/.config/git/template-dir
+  defaultBranch = main
+
 [core]
   pager = less -FRSX
   whitespace = fix,-indent-with-non-tab,trailing-space,-cr-at-eol
@@ -60,8 +63,9 @@
   mailmap = true
 
 [credential]
-  # helper = osxkeychain
   helper = token
 
 [hub]
   protocol = https
+
+# vim:ft=gitconfig

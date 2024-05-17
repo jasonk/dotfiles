@@ -35,16 +35,16 @@ path=(
   "$HOME/.local/bin"
   "$HOME/.yarn/.bin"
   "$HOME/.config/yarn/global/node_modules/.bin"
+  "$HOME/.docker/bin"
+  /opt/homebrew/bin
+  /opt/homebrew/sbin
+  $path
   /usr/local/bin
   /usr/bin
   /bin
   /usr/local/sbin
   /usr/sbin
   /sbin
-  /opt/homebrew/bin
-  /opt/homebrew/sbin
-  "$HOME/.docker/bin"
-  $path
 )
 
 export ZSH_CACHE="$HOME/.cache/zsh"

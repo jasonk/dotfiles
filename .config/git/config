@@ -4,8 +4,3 @@
     path = github-config
     path = mergetool
     path = difftools
-[init]
-	defaultBranch = main
-[user]
-	name = Jason Kohles
-	email = email@jasonkohles.com

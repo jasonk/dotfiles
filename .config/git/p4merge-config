@@ -6,3 +6,5 @@
   # you can download for free from
   #   http://www.perforce.com/perforce/downloads/index.html
   #tool = p4merge
+
+# vim:ft=gitconfig

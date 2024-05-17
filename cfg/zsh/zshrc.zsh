@@ -1,15 +1,5 @@
 export CACHE="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-# Executes commands at the start of an interactive session.  Make sure
-# nothing that produces output runs before this.
-# Disabled because I found it annoying and un-necessary.  It allows
-# the prompt to be displayed while zsh is still loading things, but if
-# you enter any command it doesn't run until after all of that is
-# finished anyway.
-#if [[ -r "$CACHE/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#  source "$CACHE/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
-
 ZSH_DIR="$(dirname "${(%):-%x}")"
 
 # add an autoload function path, if directory exists
@@ -29,7 +19,6 @@ limit core 0
 limit -s
 
 umask 022
-
 
 # Reload autoloaded functions
 freload() for i; do unfunction $i; autoload -U $i; done
@@ -55,4 +44,3 @@ prompt jasonk
 # set to anything that matches `*vi*`.  If you really do want the vi
 # keymap, just change this to `bindkey -v`.
 bindkey -e
-setopt TRANSIENT_RPROMPT
