@@ -63,6 +63,8 @@
 --ignore-dir=is:lcov-report
 --ignore-dir=is:test-results
 --ignore-file=is:.coverage.json
+--ignore-file=is:coverage.json
+--ignore-file=is:coverage.info
 
 --ignore-file=is:.babelrc
 --ignore-file=is:.editorconfig

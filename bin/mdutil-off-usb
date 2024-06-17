@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+
+disks=()
+for I in /Volumes/*; do
+  if [ -h "$I" ]; then continue; fi
+  if [ ! -d "$I" ]; then continue; fi
+  touch "$I/.metadata_never_index"
+  disks+=( "$I" )
+done
+
+sudo mdutil -d "${disks[@]}"
