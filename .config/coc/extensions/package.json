@@ -1,18 +1,12 @@
 {
+  "lastUpdate": 1721314852985,
   "dependencies": {
-    "coc-diagnostic": ">=0.23.7",
-    "coc-eslint": ">=1.6.0",
-    "coc-eslint8": ">=2.0.0",
+    "coc-tsserver": ">=2.2.0",
     "coc-html": ">=1.8.0",
-    "coc-json": ">=1.8.0",
-    "coc-pyright": ">=1.1.351",
-    "coc-sh": ">=0.7.0",
-    "coc-snippets": ">=3.1.6",
-    "coc-tsserver": ">=2.1.0",
+    "coc-snippets": ">=3.1.10",
+    "coc-eslint8": ">=2.0.0",
+    "coc-json": ">=1.9.2",
     "coc-yaml": ">=1.9.0",
-    "@yaegassy/coc-ruff": ">=0.6.3"
-  },
-  "disabled": [],
-  "locked": [],
-  "lastUpdate": 1718576350585
+    "coc-pyright": ">=1.1.371"
+  }
 }

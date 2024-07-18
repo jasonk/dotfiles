@@ -81,7 +81,6 @@
         "editor.formatOnType": true
     },
     "prisma.showPrismaDataPlatformNotification": false,
-    "python.defaultInterpreterPath": "/Users/jason/swiper/.direnv/python-3.12",
     "python.analysis.inlayHints.pytestParameters": true,
     "python.analysis.inlayHints.functionReturnTypes": true,
     "python.analysis.inlayHints.callArgumentNames": "partial",

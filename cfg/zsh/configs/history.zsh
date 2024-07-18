@@ -12,6 +12,8 @@ unsetopt SHARE_HISTORY
 # Ignore all duplicate entries in the history file
 setopt HIST_IGNORE_ALL_DUPS
 
+# Save command history
+HISTFILE=${ZDOTDIR:-$HOME}/.zsh_history
 HISTSIZE=30000
 SAVEHIST=30000
 

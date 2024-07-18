@@ -14,6 +14,20 @@
 #   .zlogin (zlogin.zsh)
 #   .zlogout (zlogout.zsh)
 
+# More specificially:
+#
+# /etc/zshenv   - Every shell. Always loaded
+# ~/.zshenv     - Every shell, unless using -f
+# /etc/zprofile - if it's a login shell
+# ~/.zprofile   - if it's a login shell
+# /etc/zshrc    - if it's an interactive shell
+# ~/.zshrc      - if it's an interactive shell
+# /etc/zlogin   - if it's a login shell
+# ~/.zlogin     - if it's a login shell
+
+# Don't load global configs, which break our path
+setopt noglobalrcs
+
 ulimit -S -c 0
 umask 0022
 
@@ -39,13 +53,13 @@ path=(
   "$HOME/.cargo/bin"
   /opt/homebrew/bin
   /opt/homebrew/sbin
-  $path
   /usr/local/bin
   /usr/bin
   /bin
   /usr/local/sbin
   /usr/sbin
   /sbin
+  /System/Cryptexes/App/usr/bin
 )
 
 export ZSH_CACHE="$HOME/.cache/zsh"
