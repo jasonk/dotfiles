@@ -30,19 +30,20 @@
 --ignore-dir=is:.direnv
 --ignore-dir=is:.docusaurus
 --ignore-dir=is:.meteor
+--ignore-dir=is:.mypy_cache
 --ignore-dir=is:.next
 --ignore-dir=is:.storybook
 --ignore-dir=is:.styleguide
+--ignore-dir=is:.venv
+--ignore-dir=is:.webpack
 --ignore-dir=is:ARCHIVED
 --ignore-dir=is:OLD
+--ignore-dir=is:__pycache__
 --ignore-dir=is:bower_components
---ignore-dir=is:.webpack
 --ignore-dir=is:build
 --ignore-dir=is:dist
 --ignore-dir=is:mochawesome-report
 --ignore-dir=is:venv
---ignore-dir=is:__pycache__
---ignore-dir=is:.mypy_cache
 
 --ignore-file=match:/\.log$/
 --ignore-file=match:/\.log\.json$/
@@ -73,13 +74,14 @@
 --ignore-file=is:.eslintrc
 --ignore-file=is:.ackrc
 
---ignore-file=is:package.json
---ignore-file=is:package-lock.json
---ignore-file=is:npm-shrinkwrap.json
---ignore-file=is:yarn.lock
---ignore-file=is:webpack.json
 --ignore-file=is:lockdown.json
+--ignore-file=is:npm-shrinkwrap.json
+--ignore-file=is:package-lock.json
+--ignore-file=is:package.json
+--ignore-file=is:poetry.lock
 --ignore-file=is:settings.json
+--ignore-file=is:webpack.json
+--ignore-file=is:yarn.lock
 
 --ignore-file=match:/[.]tsbuildinfo$/
 --ignore-file=match:/[.]log$/

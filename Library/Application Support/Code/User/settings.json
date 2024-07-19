@@ -13,7 +13,7 @@
     "vim.visualModeKeyBindings": [
     
     ],
-    "window.zoomLevel": 1,
+    "window.zoomLevel": 2,
     "vim.normalModeKeyBindings": [
         // Bookmarks
         {
@@ -66,7 +66,6 @@
     "editor.minimap.enabled": false,
     "vsicons.dontShowNewVersionMessage": true,
     "window.clickThroughInactive": false,
-    "window.zoomLevel": 2,
     "editor.cursorBlinking": "expand",
     "platformio-ide.activateOnlyOnPlatformIOProject": true,
     "platformio-ide.forceUploadAndMonitor": true,
