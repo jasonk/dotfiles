@@ -1,1 +1,1 @@
-" Plugin 'neoclide/jsonc.vim'
+" Plugin neoclide/jsonc.vim

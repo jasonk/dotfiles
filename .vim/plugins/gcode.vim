@@ -1,1 +1,1 @@
-" Plugin 'wilriker/gcode.vim'
+" Plugin wilriker/gcode.vim

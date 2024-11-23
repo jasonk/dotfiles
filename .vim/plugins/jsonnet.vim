@@ -1,1 +1,1 @@
-" Plugin 'google/vim-jsonnet'
+" Plugin google/vim-jsonnet

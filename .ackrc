@@ -60,7 +60,9 @@
 --ignore-dir=is:.test-results
 
 --ignore-dir=is:.nyc_output
+--ignore-dir=is:.esphome
 --ignore-dir=is:coverage
+--ignore-dir=is:htmlcov
 --ignore-dir=is:lcov-report
 --ignore-dir=is:test-results
 --ignore-file=is:.coverage.json

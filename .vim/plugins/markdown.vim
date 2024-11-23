@@ -1,5 +1,5 @@
-" Plugin 'plasticboy/vim-markdown'
-" Plugin 'jtratner/vim-flavored-markdown'
+" Plugin plasticboy/vim-markdown
+" Plugin jtratner/vim-flavored-markdown
 
 augroup markdown
     au!

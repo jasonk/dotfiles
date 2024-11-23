@@ -1,1 +1,1 @@
-" Plugin 'airblade/vim-gitgutter'
+" Plugin airblade/vim-gitgutter

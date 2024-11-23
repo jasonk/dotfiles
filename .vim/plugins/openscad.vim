@@ -1,1 +1,1 @@
-" Plugin 'sirtaj/vim-openscad'
+" Plugin sirtaj/vim-openscad

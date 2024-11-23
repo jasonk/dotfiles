@@ -1,1 +1,1 @@
-" Plugin 'stephpy/vim-yaml'
+" Plugin stephpy/vim-yaml

@@ -17,7 +17,7 @@ nuke() {
   local X
   for X; do
     if ! [ -e "$X" ]; then continue; fi
-    if $DRY_RUN; then
+    if is-dry-run; then
       echo "(DRY RUN) NUKING: $X"
     else
       echo "NUKING: $X"
@@ -40,13 +40,17 @@ only-keep-newest-version() {
   done
 }
 
-if [ -d ~/.pm2/logs ]; then rm -f ~/.pm2/logs/*.log; fi
+empty-dirs \
+  ~/.pm2/logs \
+  ~/.yarn/*/cache \
+  ~/Library/Caches/Homebrew/downloads
 
 if havecmd brew; then brew cleanup; fi
-if havecmd yarn; then yarn cache clean; fi
 if havecmd cypress; then cypress cache clear; fi
 if havecmd nvm; then nvm cache clear; fi
 if havecmd npm; then npm cache clear --force; fi
+if havecmd docker; then docker system prune -f; fi
+if havecmd pio; then pio system prune -f; fi
 
 only-keep-newest-version \
   "$HOME/Library/Caches/typescript/*" \
@@ -55,6 +59,3 @@ only-keep-newest-version \
   "$HOME/Library/Caches/ms-playwright/ffmpeg-*" \
   "$HOME/Library/Caches/ms-playwright/firefox-*" \
   "$HOME/Library/Caches/ms-playwright/webkit-*" \
-
-#if havecmd docker; then
-#fi

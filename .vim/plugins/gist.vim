@@ -1,1 +1,1 @@
-" Plugin 'mattn/gist-vim'
+" Plugin mattn/gist-vim

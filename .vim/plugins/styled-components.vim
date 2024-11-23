@@ -1,2 +1,2 @@
-" Disabled 'styled-components/vim-styled-components'
+" Disabled styled-components/vim-styled-components
 

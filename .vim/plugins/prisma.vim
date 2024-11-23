@@ -1,1 +1,1 @@
-" Plugin 'pantharshit00/vim-prisma'
+" Plugin pantharshit00/vim-prisma

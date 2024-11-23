@@ -1,1 +1,1 @@
-" Plugin 'jvirtanen/vim-hcl'
+" Plugin jvirtanen/vim-hcl

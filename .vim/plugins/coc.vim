@@ -1,4 +1,4 @@
-" Plugin 'neoclide/coc.nvim' branch=release
+" Plugin neoclide/coc.nvim branch=release
 " PostInstall cd ~/.config/coc/extensions && npm install --install-strategy=shallow  --ignore-scripts --no-bin-links --no-package-lock --omit=dev
 
 let g:coc_global_extensions = [

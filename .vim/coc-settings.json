@@ -145,16 +145,29 @@
     "default": true,
     "line-length": false
   },
+  "pyright.enable": true,
+  "python.pythonPath": "python3",
+  "python.linting.enabled": false,
+  /*
+  "python.linting.pylintEnabled": false,
+  "python.linting.mypyEnabled": false,
+  "python.linting.banditEnabled": false,
+  "python.linting.banditArgs": [ "--configfile", "bandit.yaml" ],
+  */
+  "typescript.suggestionActions.enabled": false,
+  "typescript.suggest.enabled": false,
+  "javascript.suggestionActions.enabled": false,
+  "javascript.suggest.enabled": false,
+  "snippets.ultisnips.pythonPrompt": false,
   // ╭──────────────────────────────────────────────────────────╮
   // │                      Language Server                     │
   // ╰──────────────────────────────────────────────────────────╯
   "languageserver": {
-    // "bash": {
-    //   "command": "bash-language-server",
-    //   "args": ["start"],
-    //   "filetypes": ["sh"]
-    // },
     "efm": {
+      "command": "efm-langserver",
+      "args": [],
+      // "args": [ "-c", "${userHome}/.config/efm-langserver/config.yaml" ],
+      "filetypes": [ "sh", "python", "vim", "markdown", "yaml" ],
       "initializationOptions": {
         "documentFormatting": false,
         "documentRangeFormatting": true,
@@ -163,103 +176,11 @@
         "codeAction": true,
         "completion": true
       },
-      "command": "efm-langserver",
-      "args": [],
-      "filetypes": [ "sh", "python" ],
-      "settings": {
-        "rootMarkers": [ ".git/" ],
-        "languages": {
-          "sh": [
-            {
-              "lintCommand": "shellcheck -f gcc -x",
-              "lintSource": "shellcheck",
-              "lintFormats": [
-                "%f:%l:%c: %trror: %m",
-                "%f:%l:%c: %tarning: %m",
-                "%f:%l:%c: %tarning: %m"
-              ]
-            },
-            {
-              "formatCommand": "shfmt -i 2",
-              "formatStdin": true
-            }
-          ],
-          "python": [
-            /*
-            {
-              "lintCommand": "mypy --show-column-numbers",
-              "lintSource": "mypy",
-              "lintFormats": [
-                "%f:%l:%c: %trror: %m",
-                "%f:%l:%c: %tarning: %m",
-                "%f:%l:%c: %tote: %m"
-              ]
-            },
-            */
-            /*
-            {
-              "formatCommand": "autopep8 -",
-              "formatStdin": true
-            },
-            {
-              "formatCommand": "black --quiet -",
-              "formatStdin": true
-            },
-            */
-            {
-              "formatCommand": "isort --quiet -",
-              "formatStdin": true
-            },
-            /*
-            {
-              "formatCommand": "yapf --quiet",
-              "formatStdin": true
-            },
-            {
-              "lintCommand": "flake8 --stdin-display-name ${INPUT} -",
-              "lintStdin": true,
-              "lintFormats": [
-                "%f:%l:%c: %m"
-              ]
-            },
-            */
-            /*
-            {
-              "lintCommand": "pylint --output-format text --score no --msg-template {path}:{line}:{column}:{C}:{msg} ${INPUT}",
-              "lintStdin": false,
-              "lintOffsetColumns": 1,
-              "lintFormats": [
-                "%f:%l:%c:%t:%m"
-              ],
-              "lintCategoryMap": {
-                "I": "H",
-                "R": "I",
-                "C": "I",
-                "W": "W",
-                "E": "E",
-                "F": "E"
-              },
-            },
-            */
-          ]
-        }
-      }
     },
     "dockerfile": {
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
       "args": ["--stdio"]
     }
-  },
-  "pyright.enable": true,
-  "python.pythonPath": "python3",
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": true,
-  "python.linting.mypyEnabled": true,
-  "python.linting.banditEnabled": true,
-  "typescript.suggestionActions.enabled": false,
-  "typescript.suggest.enabled": false,
-  "javascript.suggestionActions.enabled": false,
-  "javascript.suggest.enabled": false,
-  "snippets.ultisnips.pythonPrompt": false
+  }
 } // vim:ft=jsonc

@@ -1,1 +1,1 @@
-" Disabled 'mustache/vim-mustache-handlebars'
+" Disabled mustache/vim-mustache-handlebars

@@ -1,1 +1,1 @@
-" Plugin 'lepture/vim-jinja'
+" Plugin lepture/vim-jinja

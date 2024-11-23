@@ -89,5 +89,7 @@
     "python.analysis.diagnosticMode": "workspace",
     "python.testing.pytestArgs": [
         "-rP"
-    ]
+    ],
+    "python.linting.banditArgs": [ "--configfile", "pyproject.toml" ]
+
 }

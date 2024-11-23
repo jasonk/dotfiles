@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import os, pwd
+import os, pwd, shlex
 from pathlib import Path
+from dataclasses import dataclass, field
 from subprocess import run as _run, CalledProcessError
 
 USER = pwd.getpwuid( os.getuid() )[0]
@@ -26,88 +27,135 @@ def run( *args, **kwargs ):
 def current_head( repo_dir: Path ) -> str:
     return run( 'git', 'rev-parse', 'HEAD', cwd = repo_dir )
 
-def update_repo(
-    url: str, repo_dir: Path, *,
-    branch: str | None = None,
-    depth: int | None = None,
-    **_,
-) -> bool:
-    REPO_DIRS.add( repo_dir )
-    repo_dir.parent.mkdir( parents = True, exist_ok = True )
-    if repo_dir.is_dir():
-        before = current_head( repo_dir )
-        if branch:
-            out = run( 'git', 'checkout', branch, cwd = repo_dir )
-            if not out.startswith( 'Already on ' ): print( out )
-        out = run( 'git', 'pull', '--ff-only', '--no-rebase', cwd = repo_dir )
-        if out != 'Already up to date.': print( out )
-        after = current_head( repo_dir )
-        return before != after
-    else:
-        args = []
-        if branch: args += [ '-b', branch ]
-        if depth: args += [ '--depth', depth ]
-        run( 'git', 'clone', *args, url, str( repo_dir ) )
-        return True
+@dataclass
+class Plugin:
+    file: Path
 
-def process_plugin( file: Path ):
+    name: str = field( init = False )
+    text: str = field( init = False )
 
-    name = file.stem
-    text = file.read_text().strip()
+    is_changed: bool = field( default = False, init = False )
+    is_disabled: bool = field( default = False, init = False )
 
-    had_changes = False
+    def __post_init__( self ):
+        self.name = self.file.stem
+        self.text = file.read_text()
 
-    for line in text.splitlines():
-        if not line.startswith( '" ' ): return
-        line = line.lstrip( '" ' )
-        if not len( line ): continue
-        if ' ' not in line: continue
-        cmd, args = line.split( ' ', 1 )
-        cmd = cmd.lower().strip()
-        args = args.strip( "' " )
-        print( cmd, args )
-        if cmd == 'disabled': continue
-        if cmd == 'plugin':
-            PLUGINS.add( name )
-            repo, *parts = args.split( ' ' )
-            repo = repo.strip( "' " )
-            opts = {}
-            for part in parts:
-                l, r = part.split( '=', 1 )
-                opts[ l ] = r
-            pack_name = opts.get( 'name', Path( repo ).stem )
-            pack_dir = PACKS_DIR / pack_name
-            REPO_DIRS.add( pack_dir )
-            if '://' in repo:
-                url = repo
+    def parse_args( self, line: str ):
+        args: list[str] = []
+        kwargs: dict[str, str] = {}
+        for part in shlex.split( line ):
+            if '=' in part:
+                k, v = part.split( '=', 1 )
+                kwargs[ k ] = v
             else:
-                url = 'https://github.com/' + repo
-            if subdir := opts.pop( 'directory', None ):
-                repo_dir = VIM_DIR / 'repos' / pack_name
-                if update_repo( url, repo_dir, **opts ):
-                    run(
-                        'rsync', '-avPH', '--delete',
-                        str( repo_dir / subdir ) + '/',
-                        str( pack_dir ) + '/',
-                    )
-                    had_changes = True
+                args.append( part )
+        return args, kwargs
+
+    def process( self ):
+        for line in self.text.strip().splitlines():
+            if not line.startswith( '" ' ): return
+            line = line.lstrip( '" ' ).strip()
+            if not len( line ): continue
+            if ' ' not in line: continue
+            cmd, rest = line.split( ' ', 1 )
+            cmd = cmd.lower().strip()
+            print( cmd, rest )
+            if method := getattr( self, f'raw_{cmd}', None ):
+                method( rest )
             else:
-                if update_repo( url, pack_dir, **opts ):
-                    had_changes = True
-        elif cmd == 'postinstall':
-            if not had_changes: continue
-            print( f'Running postinstall for {name} in {pack_dir}' )
-            try:
-                run( 'bash', '-c', args, cwd = pack_dir )
-            except CalledProcessError as ex:
-                print( 'PostInstall failed:', ex )
+                args, kwargs = self.parse_args( rest )
+                method = getattr( self, cmd )
+                method( *args, **kwargs )
+
+    pack_name: str = field( init = False )
+
+    @property
+    def pack_dir( self ) -> Path:
+        return PACKS_DIR / self.pack_name
+
+    def update_repo(
+        self,
+        url: str,
+        repo_dir: Path,
+        branch: str | None = None,
+        depth: str | None = None,
+    ) -> bool:
+        REPO_DIRS.add( repo_dir )
+        repo_dir.parent.mkdir( parents = True, exist_ok = True )
+        if repo_dir.is_dir():
+            before = current_head( repo_dir )
+            if branch:
+                out = run( 'git', 'checkout', branch, cwd = repo_dir )
+                if not out.startswith( 'Already on ' ): print( out )
+            out = run(
+                'git', 'pull', '--ff-only', '--no-rebase', cwd = repo_dir,
+            )
+            if out != 'Already up to date.': print( out )
+            after = current_head( repo_dir )
+            if before != after:
+                self.is_changed = True
+                return True
         else:
-            print( 'Unknown command:', line )
+            args = []
+            if branch: args += [ '-b', branch ]
+            if depth: args += [ '--depth', depth ]
+            args += [ url, str( repo_dir ) ]
+            run( 'git', 'clone', *args )
+            self.is_changed = True
+            return True
+        return False
+
+    def plugin(
+        self,
+        repo: str,
+        name: str | None = None,
+        directory: str | None = None,
+        branch: str | None = None,
+        depth: str | None = None,
+    ):
+        if self.is_disabled: return
+        self.pack_name = name or Path( repo ).stem
+
+        PLUGINS.add( self.name )
+        REPO_DIRS.add( self.pack_dir )
+        if '://' in repo:
+            url = repo
+        else:
+            url = 'https://github.com/' + repo
+        kwargs: dict[str, str] = {}
+        if branch: kwargs[ 'branch' ] = branch
+        if depth: kwargs[ 'depth' ] = depth
+        if directory:
+            repo_dir = VIM_DIR / 'repos' / self.pack_name
+            if self.update_repo( url, repo_dir, **kwargs ):
+                run(
+                    'rsync', '-avPH', '--delete',
+                    str( repo_dir / directory ) + '/',
+                    str( self.pack_dir ) + '/',
+                )
+                self.is_changed = True
+        else:
+            if self.update_repo( url, self.pack_dir, **kwargs ):
+                self.is_changed = True
+
+    def disabled( self, *args, **kwargs ):
+        self.is_disabled = True
+        self.plugin( *args, **kwargs )
+
+    def raw_postinstall( self, command: str ):
+        if not self.is_changed: return
+        print( f'Running postinstall for {self.name} in {self.pack_dir}' )
+        try:
+            run( 'bash', '-c', command, cwd = self.pack_dir )
+        except CalledProcessError as ex:
+            print( 'PostInstall failed:', ex )
 
 for file in PLUGINS_DIR.iterdir():
     if not file.is_file(): continue
     if file.suffix != '.vim': continue
-    process_plugin( file )
+    plugin = Plugin( file )
+    plugin.process()
 
 for subdir in PACKS_DIR.iterdir():
     if subdir not in REPO_DIRS:

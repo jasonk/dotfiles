@@ -1,1 +1,1 @@
-" Plugin 'martinda/Jenkinsfile-vim-syntax'
+" Plugin martinda/Jenkinsfile-vim-syntax

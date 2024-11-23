@@ -1,1 +1,1 @@
-" Plugin 'vim-scripts/bats.vim'
+" Plugin vim-scripts/bats.vim

@@ -1,1 +1,1 @@
-" Plugin 'digitaltoad/vim-pug'
+" Plugin digitaltoad/vim-pug

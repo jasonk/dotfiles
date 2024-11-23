@@ -1,1 +1,1 @@
-" Plugin 'alunny/pegjs-vim'
+" Plugin alunny/pegjs-vim

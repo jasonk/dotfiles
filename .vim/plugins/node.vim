@@ -1,1 +1,1 @@
-" Plugin 'moll/vim-node'
+" Plugin moll/vim-node
