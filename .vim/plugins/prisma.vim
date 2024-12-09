@@ -1,1 +1,1 @@
-" Plugin pantharshit00/vim-prisma
+" Disabled pantharshit00/vim-prisma

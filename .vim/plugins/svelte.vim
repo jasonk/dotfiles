@@ -1,1 +1,1 @@
-" Plugin evanleck/vim-svelte
+" Disabled evanleck/vim-svelte

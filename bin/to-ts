@@ -1,0 +1,57 @@
+#!/bin/bash
+
+MODS="$(git rev-parse --show-toplevel)/node_modules/5to6-codemod/transforms"
+
+warn() { echo "$@" 1>&2; }
+die() { warn "$@"; exit 1; }
+
+TS_FILES=()
+
+tsname() {
+  if grep --silent -E 'import.*React' "$1"; then
+    echo "${1%.js}.tsx"
+  else
+    echo "${1%.js}.ts"
+  fi
+}
+
+collect() {
+  local LINE FILE TS
+  for FILE in "$@"; do
+    if [ -d "$FILE" ]; then
+      while IFS='' read -r LINE; do
+        collect "$LINE"
+      done < <( find "$FILE" -type f -name \*.js )
+      continue
+    fi
+    if [ -f "$FILE" ] && [[ $FILE =~ .js$ ]]; then
+      TS="$(tsname "$FILE")"
+      echo "$FILE -> $TS"
+      if [ -f "$TS" ]; then
+        warn "$TS already exists, not overwriting it"
+        continue
+      fi
+      if git ls-files "$FILE" | grep -q "$FILE" &> /dev/null; then
+        git mv "$FILE" "$TS"
+      else
+        mv "$FILE" "$TS"
+      fi
+      TS_FILES+=( "$TS" )
+      continue
+    fi
+    echo "Ignoring $FILE"
+  done
+}
+
+collect "$@"
+
+CODEMODS=(
+  # Transform `require()` to `import`
+  -t "$MODS/cjs.js"
+  # Transform `module.exports` to `export default`
+  -t "$MODS/exports.js"
+)
+
+# Transform `require()` to `import`
+#echo jscodeshift "${CODEMODS[@]}" "${TS_FILES[@]}"
+jscodeshift "${CODEMODS[@]}" "${TS_FILES[@]}"

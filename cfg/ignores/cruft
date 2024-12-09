@@ -3,6 +3,9 @@
 # IMPORTANT: If you edit this file directly you have to run `cfg
 # ignore` to update the "real" gitignore file that git actually uses!
 #
-/.CFUserTextEncoding
-/.DS_Store
-/.skipbuddy
+.CFUserTextEncoding
+.DS_Store
+.skipbuddy
+*.lock
+*.socket
+socket

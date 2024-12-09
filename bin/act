@@ -1,0 +1,23 @@
+#!/bin/bash
+set -euo pipefail
+
+find-addr() {
+  local addr iface
+  for iface in $(ipconfig getiflist); do
+    if ! [[ $iface == en* ]]; then continue; fi
+    addr="$(ipconfig getifaddr "$iface")"
+    if [ -n "$addr" ]; then
+      echo "$addr"
+      return
+    fi
+  done
+}
+find-workflows() {
+  realpath "$(git rev-parse --show-toplevel)/.github/workflows"
+}
+
+exec /opt/homebrew/bin/act \
+  --use-new-action-cache \
+  --artifact-server-addr="$(find-addr)" \
+  --workflows="$(find-workflows)" \
+  "$@"

@@ -59,3 +59,11 @@ only-keep-newest-version \
   "$HOME/Library/Caches/ms-playwright/ffmpeg-*" \
   "$HOME/Library/Caches/ms-playwright/firefox-*" \
   "$HOME/Library/Caches/ms-playwright/webkit-*" \
+
+if havecmd docker; then
+  docker system prune
+  # docker container prune
+  # docker image prune
+  # docker network prune
+  # docker volume prune
+fi

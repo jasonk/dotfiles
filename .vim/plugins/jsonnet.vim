@@ -1,1 +1,1 @@
-" Plugin google/vim-jsonnet
+" Disabled google/vim-jsonnet

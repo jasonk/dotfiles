@@ -1,0 +1,25 @@
+#!/bin/bash
+set -euo pipefail
+
+brew tap homebrew/cask-versions
+brew install --cask firefox-developer-edition
+
+certsdir="$HOME/Library/Application Support/Mozilla/Certificates"
+appdir="/Applications/Firefox Developer Edition.app/Contents/Resources"
+
+if [ -d "$HOME/.local/ca-certs" ]; then
+  mkdir -p "$certsdir"
+  cp "$HOME/.local/ca-certs/"*.pem "$certsdir"
+  certs="$( ( cd "$certsdir" && echo *.pem | xargs -n1 ) | jq -ncR '[inputs]')"
+
+  mkdir -p "$appdir/distribution"
+
+  jq -n --argjson CERTS "$certs" '{
+    "policies": {
+      "Certificates": {
+        "ImportEnterpriseRoots": true,
+        "Install": $CERTS
+      }
+    }
+  }' > "$appdir/distribution/policies.json"
+fi

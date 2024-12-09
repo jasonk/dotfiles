@@ -1,1 +1,1 @@
-" Plugin dearrrfish/vim-applescript
+" Disabled dearrrfish/vim-applescript

@@ -1,1 +1,1 @@
-" Plugin ClockworkNet/vim-apparmor
+" Disabled ClockworkNet/vim-apparmor

@@ -3,11 +3,13 @@
 let g:ale_linters = {
   \ 'javascript': [ 'eslint' ],
   \ 'typescript': [ 'eslint' ]
+  \ 'python': [ 'ruff' ],
   \ }
 
 let g:ale_fixers = {
   \ 'javascript': [ 'eslint' ],
   \ 'typescript': [ 'eslint' ]
+  \ 'python': [ 'ruff-format' ],
   \ }
 
 let g:ale_linters_ignore = {

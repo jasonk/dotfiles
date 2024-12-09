@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+from subprocess import run
+from pathlib import Path
+from argparse import ArgumentParser
+
+parser = ArgumentParser()
+parser.add_argument( '--stash', '-s', default='0' )
+parser.add_argument(
+    '--directory', '-d', default='0',
+    help = 'Directory to write files to. Defaults to the stash name.',
+)
+parser.add_argument(
+    '--complete', '-c', action='store_true',
+    help = 'Write the complete file as it was stashed, not just the diff.',
+)
+
+args = parser.parse_args()
+
+stash = args.stash
+directory = args.directory
+
+if stash.isdigit(): stash = 'stash@' + stash
+
+if not directory:
+    directory = stash.replace( r'\W+', '-' ).strip( r'\W' )
+
+directory = Path( directory ).resolve()
+
+root = run(
+    [ 'git', 'rev-parse', '--show-toplevel' ],
+    capture_output = True, text = True, check = True,
+).stdout.strip()
+
+# os.chdir( git( 'rev-parse', '--show-toplevel' ).trim() )
+
+def git( *args: str, **kwargs ):
+    kwargs.setdefault( 'capture_output', True )
+    kwargs.setdefault( 'text', True )
+    kwargs.setdefault( 'check', True )
+    kwargs.setdefault( 'cwd', root )
+    return run( [ 'git', *args ], **kwargs ).stdout.strip()
+
+files = git( 'stash', 'show', '-p', stash, '--name-only' ).split( '\n' )
+
+if len( files ) == 0:
+    print( f'No files in stash {stash}' )
+
+for file in files:
+    target = directory / file
+    print( file, '->', target )
+    target.parent.mkdir( parents=True, exist_ok=True )
+    command: list[str]
+    if args.complete:
+        # If you want the complete file as it was stashed
+        command = [ 'show', f'{stash}:{file}' ]
+    else:
+        # If you want to see the patch that was stashed
+        command = [ 'diff', f'{stash}^1', '--', file ]
+        target = target.parent / f'{target.name}.patch'
+    if target.exists():
+        print( f'Skipping {file}, target file ({target}) exists' )
+        continue
+    text = git( *command )
+    target.write_text( text, 'utf-8' )

@@ -97,3 +97,4 @@
 /.zcompdump*
 /.zsh_sessions
 /.zshrc.zwc
+/.cdk/cache

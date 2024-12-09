@@ -1,0 +1,17 @@
+#!/bin/bash
+set -euo pipefail
+cd "$HOME/.ssh/config.d"
+
+get-hosts() {
+  if (( $# )); then
+    # shellcheck disable=SC2068
+    ( cd ~/.ssh/config.d && echo $@ )
+  else
+    ( cd ~/.ssh/config.d && echo * )
+  fi | xargs -n1 | sed 's/\.conf$//'
+}
+
+pssh -h <(get-hosts "$@") --verbose -iAI '
+  umask 077; mkdir -p ~/.ssh; cd ~/.ssh; touch authorized_keys;
+  sort -u authorized_keys - -o authorized_keys
+' < ~/.ssh/id_*.pub

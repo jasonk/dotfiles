@@ -1,1 +1,1 @@
-" Plugin vim-perl/vim-perl
+" Disabled vim-perl/vim-perl

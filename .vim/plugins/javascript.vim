@@ -1,8 +1,9 @@
 " Plugin othree/yajs.vim
 " Plugin othree/es.next.syntax.vim
+" Plugin vim-scripts/JavaScript-Indent
+
 " Disabled othree/javascript-libraries-syntax.vim
 " Disabled pangloss/vim-javascript
-" Plugin vim-scripts/JavaScript-Indent
 " Disabled othree/yajs.vim
 " Disabled othree/javascript-libraries-syntax.vim
 " Disabled othree/es.next.syntax.vim

@@ -1,1 +1,1 @@
-" Plugin rodjek/vim-puppet
+" Disabled rodjek/vim-puppet

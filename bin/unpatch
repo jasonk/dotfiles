@@ -1,0 +1,10 @@
+#!/bin/bash
+# Given a list of `*.patch` files, attempt to apply each one in the
+# directory that contains it, and remove the patch file if successful.
+
+for I in "$@"; do
+  if [ ! -f "$I" ]; then continue; fi
+  DIR="$(dirname "$I")"
+  FILE="$(basename "$I")"
+  ( cd "$DIR" && patch < "$FILE" && rm "$FILE" )
+done

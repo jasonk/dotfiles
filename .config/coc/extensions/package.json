@@ -1,12 +1,12 @@
 {
-  "lastUpdate": 1732314920052,
+  "lastUpdate": 1733754181950,
   "dependencies": {
-    "coc-tsserver": ">=2.2.0",
     "coc-html": ">=1.8.0",
+    "coc-tsserver": ">=2.2.0",
     "coc-snippets": ">=3.1.10",
-    "coc-eslint8": ">=2.0.0",
-    "coc-yaml": ">=1.9.0",
+    "coc-pyright": ">=1.1.390",
     "coc-json": ">=1.9.2",
-    "coc-pyright": ">=1.1.371"
+    "coc-eslint8": ">=2.0.0",
+    "coc-yaml": ">=1.9.0"
   }
 }

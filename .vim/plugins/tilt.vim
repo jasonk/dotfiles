@@ -1,1 +1,1 @@
-" Plugin cappyzawa/starlark.vim
+" Disabled cappyzawa/starlark.vim

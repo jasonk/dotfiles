@@ -1,0 +1,20 @@
+#!/bin/bash
+# For all the branches in the current repo that are set with `rebase=true`
+# run `git config --local --unset branch.<name>.rebase`.  This is for use
+# when you are converting from a rebase workflow to a merge one.
+
+# Be aware that when you switch a branch from rebase to merge you may
+# have a lot of merge conflicts to deal with the first time you merge
+# from a remote.  You should either make sure the branch is fully
+# rebased before switching, or start a new branch after switching and
+# cherry pick your changes.
+set -uo pipefail
+
+# This will unset these config values that could override this change
+# and keep you rebasing without even realizing it.
+git config --unset branch.autoSetupRebase
+git config --unset pull.rebase
+
+git config --list --local \
+  | sed -n 's/rebase=true$/rebase/p' \
+  | xargs -n1 git config --local --unset

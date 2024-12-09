@@ -1,15 +1,16 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Make patch files for stashes, and then drop those stashes.
 
-STASHES=( "$@" )
-if [ "${#STASHES[@]}" -eq 0 ]; then
-  STASHES=($(git stash list | sed 's/:.*//'))
-fi
-
-for STASH in "${STASHES[@]}"; do
-  HASH="$(git rev-parse --short "$STASH")"
-  NAME="$(echo -n "$STASH:$HASH" | tr -cs '[:alnum:]' '-')"
-  echo "$STASH: $HASH -> $NAME"
-  git show "$HASH" > "$NAME.patch"
-done
-
-# git stash clear
+while IFS= read -r stash; do
+  hash="$(git rev-parse --short "$stash")"
+  name="$(echo -n "$stash-$hash" | tr -cs '[:alnum:]' '-')"
+  echo "$stash: $hash -> $name"
+  git show "$hash" > "$name.patch"
+  git stash drop "$stash"
+done < <( {
+  if (( $# > 0 )); then
+    printf '%s\n' "$@"
+  else
+    git stash list | sed 's/:.*//'
+  fi
+} | sort -rn )

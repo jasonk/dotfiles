@@ -1,1 +1,1 @@
-" Plugin wilriker/gcode.vim
+" Disabled wilriker/gcode.vim

@@ -1,3 +1,18 @@
 !/Library/Application Support/Code/User
+/Library/Application Support/Code/*Cache*
+/Library/Application Support/Code/*Storage*
+/Library/Application Support/Code/Backup*
+/Library/Application Support/Code/Cookies*
+/Library/Application Support/Code/Crashpad
+/Library/Application Support/Code/Network Persistent State
+/Library/Application Support/Code/Preferences
+/Library/Application Support/Code/Service Worker
+/Library/Application Support/Code/Shared Dictionary
+/Library/Application Support/Code/TransportSecurity
+/Library/Application Support/Code/Trust\ Tokens*
+/Library/Application Support/Code/User/History
 /Library/Application Support/Code/User/globalStorage
 /Library/Application Support/Code/User/workspaceStorage
+/Library/Application Support/Code/databases
+/Library/Application Support/Code/logs
+/Library/Application Support/Code/machineid

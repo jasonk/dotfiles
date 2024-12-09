@@ -1,1 +1,1 @@
-" Plugin saltstack/salt-vim
+" Disabled saltstack/salt-vim
