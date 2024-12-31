@@ -1,4 +1,5 @@
 ---
+extends: default
 
 yaml-files:
   - '*.yaml'
@@ -10,3 +11,18 @@ rules:
     max-spaces-inside: 1
     min-spaces-inside-empty: 0
     max-spaces-inside-empty: 0
+
+  # 80 chars should be enough, but don't fail if a line is longer
+  line-length:
+    max: 80
+    level: warning
+
+  # accept both     key:
+  #                   - item
+  #
+  # and             key:
+  #                 - item
+  indentation:
+    indent-sequences: whatever
+
+# vim:ft=yaml
